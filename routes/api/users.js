@@ -8,7 +8,7 @@ const config = require('config');
 // @desc Register user
 
 router.post('/', async (req,res) => {
-  const {name,email,password} = req.body;
+  const {username,email,password, first_name, last_name} = req.body;
 
   //See if user exists
   let user_exists = await pool.query("SELECT email FROM users WHERE email = $1", [email]);
@@ -23,8 +23,11 @@ router.post('/', async (req,res) => {
   let encrypted_password = await bcrypt.hash(password, salt);
 
   // Save the user
-  let saved_user = await pool.query("INSERT INTO users (name,email,password) VALUES ($1,$2,$3) RETURNING *", [name,email,encrypted_password]);
+  let saved_user = await pool.query("INSERT INTO users (username,email,password) VALUES ($1,$2,$3) RETURNING *", [username,email,encrypted_password]);
   //saved_user.rows[0]
+
+  //Create a new profile
+  pool.query("INSERT INTO profiles (user_id, first_name, last_name) VALUES ($1, $2, $3)", [saved_user.rows[0].user_id, first_name, last_name]);
 
   const payload = {
     user: {
