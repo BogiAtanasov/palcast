@@ -35,5 +35,20 @@ router.post('/', auth, async (req,res) => {
 
 });
 
+// @route GET api/profile/user/:user_id
+// @desc Get profile by user_id
+router.get('/user/:user_id', auth, async (req,res) => {
+  try {
+    const profile =  await pool.query("SELECT * FROM profiles WHERE user_id = $1", [req.params.user_id]);
+
+    res.json(profile.rows[0]);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 
 module.exports = router;
