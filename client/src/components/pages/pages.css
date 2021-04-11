@@ -206,7 +206,106 @@ section.laptop h1{
   top: calc(50% - 7.5px);
 }
 
-.landing_page footer{
+.register_page, .login_page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+.register__container, .login__container{
+  display: flex;
+  width: 800px;
+  height: 600px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.register__image, .login__image{
+  flex: 0 0 310px;
+  background: var(--black);
+  color: white;
+  position: relative;
+  padding:20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  text-align: center;
+}
+
+.register__image .register__ilu, .login__image .login__ilu{
+  width: 70%;
+  z-index: 2;
+}
+
+.register__image h1, .register__image h4, .login__image h1, .login__image h4{
+  z-index: 2;
+}
+
+.register__form, .login__form{
+  width: 410px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:40px;
+}
+
+.register__form h1, .register__form h4, .login__form h1, .login__form h4{
+  color: #757575;
+}
+
+.register_bg_top, .login_bg_top{
+  position: absolute;
+  top:0;
+  left:0;
+}
+
+.register_bg_bottom, .login_bg_bottom{
+  position: absolute;
+  bottom:0;
+  right:0;
+}
+
+.register_bg, .login_bg{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  z-index: 1;
+}
+
+.register_page footer{
   height: 300px;
   background: var(--black);
+}
+
+.register_page h4, .login_page h4{
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.register_page h1, .login_page h1{
+  font-size: 30px;
+  margin-top: 0;
+}
+
+.social_login img{
+  width: 30px;
+  margin: 0 10px;
+}
+
+.login_redirect, .register_redirect{
+  margin-top:40px;
+  font-size: 12px !important;
+}
+
+.login_redirect span, .register_redirect span{
+  text-decoration: underline;
+  color: white !important;
 }

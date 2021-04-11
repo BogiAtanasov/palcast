@@ -10,6 +10,13 @@ import landing_laptop from '../assets/images/landing_laptop.svg';
 import landing_podcast from '../assets/images/landing_podcast.svg';
 import landing_recording from '../assets/images/landing_recording.svg';
 import landing_running from '../assets/images/landing_running.svg';
+import login from '../assets/images/login.svg';
+import register from '../assets/images/register.svg';
+import auth_bg from '../assets/images/auth_bg.svg';
+import auth_bg_top from '../assets/images/auth_bg_top.svg';
+import auth_bg_bottom from '../assets/images/auth_bg_bottom.svg';
+import fb from '../assets/images/fb.svg';
+import google from '../assets/images/google.svg';
 
 
 export default {
@@ -25,4 +32,11 @@ export default {
     landing_podcast,
     landing_recording,
     landing_running,
+    login,
+    register,
+    auth_bg,
+    auth_bg_bottom,
+    auth_bg_top,
+    fb,
+    google,
 };

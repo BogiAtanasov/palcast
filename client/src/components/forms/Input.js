@@ -1,7 +1,7 @@
 import React from 'react';
 import './forms.css';
 import { MdSearch } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa";
 import { HiMail } from "react-icons/hi";
 
 
@@ -9,6 +9,7 @@ const icons = {
   'search' : <MdSearch />,
   'profile' : <FaUser />,
   'mail' : <HiMail />,
+  'password' : <FaLock className="icon__password"/>,
 }
 
 const Input = ({iconName, placeholder, onChange, primary, secondary, value}) => {
