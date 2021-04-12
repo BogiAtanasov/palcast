@@ -20,7 +20,7 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value}) => 
 
   return (
     <div className={`input ${primary && 'input__primary'} ${secondary && 'input__secondary'}`}>
-    <input placeholder={placeholder} onClick={onChange ? onChange() : () => {}} />
+    <input placeholder={placeholder} value={value} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
     {iconSvg && iconSvg}
     </div>
   )

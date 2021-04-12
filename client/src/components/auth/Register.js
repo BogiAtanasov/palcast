@@ -5,11 +5,42 @@ import Button from '../forms/Button';
 import Input from '../forms/Input';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle} from "react-icons/fa";
+import axios from 'axios';
 
 const Register = () => {
   const [passwordInput, setPasswordInput] = useState();
   const [emailInput, setEmailInput] = useState();
   const [nameInput, setNameInput] = useState();
+  const [firstNameInput, setFirstNameInput] = useState();
+  const [lastNameInput, setLastNameInput] = useState();
+
+  const submitForm = async e => {
+
+    const newUser = {
+      username: nameInput,
+      email: emailInput,
+      password: passwordInput,
+      firstName: firstNameInput,
+      lastName: lastNameInput,
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+    const body = JSON.stringify(newUser);
+
+    const res = await axios.post('api/users', body, config);
+    console.log(res.data);
+
+    } catch (e) {
+      console.error(e.response.data);
+    }
+
+  }
+
   return (
     <div className="register_page">
       <img className="register_bg_top" src={Images.auth_bg_top} alt=""/>
@@ -31,10 +62,12 @@ const Register = () => {
             <img src={Images.google} alt=""/>
           </div>
           <h4>or use your email for registration</h4>
-          <Input primary value={nameInput} iconName='profile' onChange={(value)=>setNameInput(value)} placeholder="Name"/>
+          <Input primary value={nameInput} iconName='profile' onChange={(value)=>setNameInput(value)} placeholder="Username"/>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
-          <Input primary value={passwordInput} iconName='password' onChange={(value)=>setEmailInput(value)} placeholder="Password"/>
-          <Button primary text="Sign up"></Button>
+          <Input primary value={passwordInput} iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
+          <Input primary value={firstNameInput} iconName='profile' onChange={(value)=>setFirstNameInput(value)} placeholder="First Name"/>
+          <Input primary value={lastNameInput} iconName='profile' onChange={(value)=>setLastNameInput(value)} placeholder="Last Name"/>
+          <Button onClick={()=> submitForm() } primary text="Sign up"></Button>
         </div>
       </div>
     </div>
