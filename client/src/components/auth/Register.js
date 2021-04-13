@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import '../pages/pages.css';
+
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
+import PropTypes from 'prop-types';
+
 import Images from '../Images';
 import Button from '../forms/Button';
 import Input from '../forms/Input';
@@ -7,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle} from "react-icons/fa";
 import axios from 'axios';
 
-const Register = () => {
+const Register = ({ setAlert }) => {
   const [passwordInput, setPasswordInput] = useState();
   const [emailInput, setEmailInput] = useState();
   const [nameInput, setNameInput] = useState();
@@ -15,6 +20,8 @@ const Register = () => {
   const [lastNameInput, setLastNameInput] = useState();
 
   const submitForm = async e => {
+
+     setAlert('Testing alerts', 'danger', 3000);
 
     const newUser = {
       username: nameInput,
@@ -74,4 +81,8 @@ const Register = () => {
   )
 }
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired
+}
+
+export default connect(null, { setAlert })(Register);
