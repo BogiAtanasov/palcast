@@ -3,6 +3,7 @@ import '../pages/pages.css';
 
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 import Images from '../Images';
@@ -12,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle} from "react-icons/fa";
 import axios from 'axios';
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
   const [passwordInput, setPasswordInput] = useState();
   const [emailInput, setEmailInput] = useState();
   const [nameInput, setNameInput] = useState();
@@ -20,8 +21,6 @@ const Register = ({ setAlert }) => {
   const [lastNameInput, setLastNameInput] = useState();
 
   const submitForm = async e => {
-
-     setAlert('Testing alerts', 'danger', 3000);
 
     const newUser = {
       username: nameInput,
@@ -39,8 +38,9 @@ const Register = ({ setAlert }) => {
 
     const body = JSON.stringify(newUser);
 
-    const res = await axios.post('api/users', body, config);
-    console.log(res.data);
+    // const res = await axios.post('api/users', body, config);
+
+    register({username: newUser.username, email:newUser.email, password:newUser.password, firstName:newUser.firstName, lastName:newUser.lastName });
 
     } catch (e) {
       console.error(e.response.data);
@@ -82,7 +82,8 @@ const Register = ({ setAlert }) => {
 }
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 }
 
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);
