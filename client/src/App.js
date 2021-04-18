@@ -1,17 +1,35 @@
 import './App.css';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Landing from './components/pages/Landing';
 import Alert from './components/Alert';
+import Home from './components/Home';
+import Wall from './components/Wall';
+import MediaNavbar from './components/MediaNavbar';
+
+import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';
+import setAuthToken from './utils/setAuthToken'
+import {loadUser} from './actions/auth';
 
-const App = () => (
+if(localStorage.token){
+  setAuthToken(localStorage.token);
+}
+
+const App = () => {
+
+  useEffect(()=>{
+    store.dispatch(loadUser());
+  }, []);
+
+  return(
   <Provider store={store}>
+  <MediaNavbar />
   <Router>
     <Fragment>
       <Route exact path='/' component={Landing} />
@@ -20,11 +38,13 @@ const App = () => (
         <Switch>
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
+          <PrivateRoute exact path='/home' component={Home} />
+          <PrivateRoute exact path='/wall' component={Wall} />
         </Switch>
       </section>
     </Fragment>
   </Router>
 </Provider>
 )
-
+}
 export default App;

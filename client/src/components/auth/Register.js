@@ -9,11 +9,11 @@ import PropTypes from 'prop-types';
 import Images from '../Images';
 import Button from '../forms/Button';
 import Input from '../forms/Input';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { FaFacebook, FaGoogle} from "react-icons/fa";
 import axios from 'axios';
 
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [passwordInput, setPasswordInput] = useState();
   const [emailInput, setEmailInput] = useState();
   const [nameInput, setNameInput] = useState();
@@ -46,6 +46,10 @@ const Register = ({ setAlert, register }) => {
       console.error(e.response.data);
     }
 
+  }
+
+  if(isAuthenticated){
+    return <Redirect to="/home" />;
   }
 
   return (
@@ -83,7 +87,13 @@ const Register = ({ setAlert, register }) => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 }
 
-export default connect(null, { setAlert, register })(Register);
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Register);
