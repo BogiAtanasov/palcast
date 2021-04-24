@@ -7,8 +7,9 @@ import Landing from './components/pages/Landing';
 import Alert from './components/Alert';
 import Home from './components/Home';
 import Wall from './components/Wall';
-import MediaNavbar from './components/MediaNavbar';
-
+import Profile from './components/Profile';
+import MediaNavbar from './components/layout/MediaNavbar';
+import Navbar from './components/layout/Navbar';
 import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
@@ -33,13 +34,15 @@ const App = () => {
   <Router>
     <Fragment>
       <Route exact path='/' component={Landing} />
-      <section>
+      <Navbar />
+      <section className="app">
         <Alert />
         <Switch>
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <PrivateRoute exact path='/home' component={Home} />
           <PrivateRoute exact path='/wall' component={Wall} />
+          <PrivateRoute exact path='/profile' component={Profile} />
         </Switch>
       </section>
     </Fragment>

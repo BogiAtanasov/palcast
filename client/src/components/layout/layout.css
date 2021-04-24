@@ -1,0 +1,72 @@
+:root {
+  --black: #071A0F;
+  --gray: #EFEFEF;
+}
+
+
+
+.media_navbar{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: var(--black);
+  height: 75px;
+}
+
+.progress_bar{
+  width: 100%;
+  background: var(--gray);
+  height: 5px;
+}
+
+.currentProgress{
+  height: 5px;
+  background: green;
+}
+
+
+.navbar{
+  position: absolute;
+  top: 0;
+  height: 55px;
+  width: 100%;
+  background: white;
+}
+
+.navbar_container{
+  width: 90%;
+  margin:auto;
+  justify-content: space-between;
+  display: flex;
+
+
+}
+
+.navbar ul{
+  display: flex;
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.navbar ul li{
+  margin: 0px 20px;
+}
+
+.navIcons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navIcons div{
+  margin: 0 20px;
+}
+
+.navIcons svg{
+  color: black;
+}
+
+.navIcons svg{
+  width: 22px;
+  height: 22px;
+}

@@ -78,3 +78,32 @@
   width: 17px;
   height: 17px;
 }
+
+.input_main{
+  display: flex;
+  align-items: center;
+  margin: 25px 0px;
+}
+
+.input_description{
+  min-width: 250px;
+
+}
+
+.input_description .description{
+  font-size: 12px;
+  margin: 2px;
+  color: #7c7c7c;
+}
+.input_description .title{
+  font-size: 14px;
+  color: #7c7c7c;
+  margin: 2px;
+}
+
+.input_main input{
+  height: 25px;
+  min-width: 250px;
+  border: 0.5px solid #d7d1d1;
+  border-radius: 3px;
+}
