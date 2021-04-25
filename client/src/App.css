@@ -8,18 +8,18 @@ body{
   padding-top: 55px;
 }
 
-.profile_page__container{
+.profile_page__container, .uploadstream_page__container{
   width: 90%;
   margin: auto;
   background: white;
 }
 
-.profile_page__content{
+.profile_page__content, .uploadstream_page__content{
   margin-top: 30px;
   padding: 20px;
 }
 
-.profile_page h1{
+.profile_page h1, .uploadstream_page h1{
   opacity: 0.5;
   display: flex;
   align-items: center;

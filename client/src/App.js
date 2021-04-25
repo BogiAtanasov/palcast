@@ -8,6 +8,7 @@ import Alert from './components/Alert';
 import Home from './components/Home';
 import Wall from './components/Wall';
 import Profile from './components/Profile';
+import UploadStream from './components/UploadStream';
 import MediaNavbar from './components/layout/MediaNavbar';
 import Navbar from './components/layout/Navbar';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -43,6 +44,7 @@ const App = () => {
           <PrivateRoute exact path='/home' component={Home} />
           <PrivateRoute exact path='/wall' component={Wall} />
           <PrivateRoute exact path='/profile' component={Profile} />
+          <PrivateRoute exact path='/studio' component={UploadStream} />
         </Switch>
       </section>
     </Fragment>

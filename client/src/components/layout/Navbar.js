@@ -18,7 +18,7 @@ const Navbar = ({logout, isAuthenticated}) => {
         <ul>
           <li className="logo">Palcast</li>
           <li>Browse</li>
-          <li>Record</li>
+          <Link to="/studio"><li>Record</li></Link>
           <li>Support</li>
         </ul>
 

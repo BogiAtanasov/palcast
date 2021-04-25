@@ -33,8 +33,6 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
   }, [loading]);
 
   const submitForm = () => {
-    console.log(formData.first_name);
-    console.log(formData.last_name);
     updateProfile({first_name: formData.first_name, last_name:formData.last_name});
   };
 

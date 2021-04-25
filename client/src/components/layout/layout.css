@@ -48,6 +48,11 @@
   list-style-type: none;
 }
 
+.navbar ul a{
+  text-decoration: none;
+  color: black;
+}
+
 .navbar ul li{
   margin: 0px 20px;
 }
@@ -69,4 +74,21 @@
 .navIcons svg{
   width: 22px;
   height: 22px;
+}
+
+.studio_tabs{
+  display: flex;
+}
+
+.studio_tabs h1{
+  margin-right:20px;
+}
+
+.studio_tabs h1:hover{
+  cursor: pointer;
+}
+
+.studio_tabs .selected{
+  color:#FEBA38;
+  border-bottom: 2px solid #FEBA38
 }
