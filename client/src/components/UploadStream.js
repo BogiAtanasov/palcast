@@ -6,21 +6,38 @@ import { getCurrentProfile, updateProfile } from '../actions/profile';
 import PropTypes from 'prop-types';
 import { FaCog } from "react-icons/fa";
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+import FormData from 'form-data';
 
 const UploadStream = ({auth}) => {
 
   const[formData, setFormData] = useState({
-      email: '',
-      password: '',
-      first_name: '',
-      last_name: '',
-      profile_id: ''
+      title: '',
+      description: '',
+      category: '',
+      mp3: null,
+      episode_cover: null,
   });
 
   const[selectedTab, setTab] = useState("upload");
 
-  const submitForm = () => {
+  const submitForm = async e => {
 
+      let info = JSON.stringify({
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+      })
+      const body = new FormData();
+      body.append("payload", info);
+      body.append("uploadFiles", formData.mp3);
+      body.append("uploadFiles", formData.episode_cover);
+
+      const res = await axios.post('api/studio', body, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+      });
   };
   const uploadFile = () => {
 
@@ -39,12 +56,12 @@ const UploadStream = ({auth}) => {
 
         {selectedTab == "upload" &&
         <div className="profile__form">
-          <Button onClick={()=> uploadFile() }  text="Upload File" description="the file must be mp3 or wav format" title="Upload File"></Button>
-          <Input value={formData.email} onChange={(value)=>setFormData({...formData, email:value})} title="Name" description="Set the title of the podcast"/>
-          <Input value={formData.password} onChange={(value)=>setFormData({...formData, password:value})} title="Category" description="Set the category of the podcast"/>
-          <Input value={formData.first_name} onChange={(value)=>setFormData({...formData, first_name:value})} title="First Name" description="Change your first name"/>
-          <Input value={formData.last_name} onChange={(value)=>setFormData({...formData, last_name:value})} title="Last Name" description="Change your last name"/>
-          <Button onClick={()=> uploadEpisodeCover() }  text="Upload File" description="Set the cover photo for this episode" title="Episode Photo"></Button>
+
+          <Input value={formData.mp3} type="file" onChange={(value)=>setFormData({...formData, mp3:value})} title="Upload File" description="the file must be mp3 or wav format" id="upload-mp3"/>
+          <Input value={formData.title} onChange={(value)=>setFormData({...formData, title:value})} title="Title" description="Set the title of the podcast"/>
+          <Input value={formData.description} onChange={(value)=>setFormData({...formData, description:value})} title="Description" description="Set the description of the podcast"/>
+          <Input value={formData.category} onChange={(value)=>setFormData({...formData, category:value})} title="Category" description="Set the category of the podcast"/>
+          <Input value={formData.episode_cover} type="file" onChange={(value)=>setFormData({...formData, episode_cover:value})} title="Upload File" description="Set the cover photo for this episode" id="upload-episode-cover"/>
           <Button onClick={()=> submitForm() } primary text="Publish"></Button>
 
         </div>
@@ -71,4 +88,4 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
 
-export default connect(null)(UploadStream);
+export default connect(mapStateToProps,null)(UploadStream);

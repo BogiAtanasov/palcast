@@ -15,18 +15,18 @@ const ProgressBar = ({progress}) => {
 }
 
 const MediaNavbar = ({logout, isAuthenticated}) => {
-  const media = new Audio (podcast);
+  const media = new Audio ("http://localhost:3000/uploads/test.mp3");
   const [mediaProgress, setMediaProgressInput] = useState(0);
 
   useEffect(()=>{
     console.log("Consturcted MediaNavbar");
-
-    const interval = setInterval(() => {
-      console.log(media.currentTime);
-      console.log(media.duration);
-      setMediaProgressInput((media.currentTime / media.duration) * 100);
-    }, 1000);
-    return () => clearInterval(interval);
+    //
+    // const interval = setInterval(() => {
+    //   console.log(media.currentTime);
+    //   console.log(media.duration);
+    //   setMediaProgressInput((media.currentTime / media.duration) * 100);
+    // }, 1000);
+    // return () => clearInterval(interval);
   }, []);
 
 

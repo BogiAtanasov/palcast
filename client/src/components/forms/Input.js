@@ -12,7 +12,7 @@ const icons = {
   'password' : <FaLock className="icon__password"/>,
 }
 
-const Input = ({iconName, placeholder, onChange, primary, secondary, value, title, description}) => {
+const Input = ({iconName, placeholder, onChange, primary, secondary, value, title, description, type, id}) => {
   var iconSvg;
   if(iconName){
     iconSvg = icons[iconName]
@@ -27,7 +27,15 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
             <p className="title">{title}</p>
             <p className="description">{description}</p>
           </div>
-          <input placeholder={placeholder} value={value} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
+          {type != "file" &&
+           <input id={id && id} placeholder={placeholder} value={value} type={type ? type : "input"} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
+          }
+          {type == "file" &&
+          <div>
+            <label className="upload_button" for={id}>Upload</label>
+            <input id={id && id} placeholder={placeholder} type={type ? type : "input"} onChange={onChange ? (val)=>onChange(val.target.files[0]) : () => {}} />
+          </div>
+          }
         </div>
       )
     }
