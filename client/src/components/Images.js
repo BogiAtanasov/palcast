@@ -17,6 +17,10 @@ import auth_bg_top from '../assets/images/auth_bg_top.svg';
 import auth_bg_bottom from '../assets/images/auth_bg_bottom.svg';
 import fb from '../assets/images/fb.svg';
 import google from '../assets/images/google.svg';
+import cat1 from '../assets/images/cat1.png';
+import cat2 from '../assets/images/cat2.png';
+import cat3 from '../assets/images/cat3.png';
+import cat4 from '../assets/images/cat4.png';
 
 
 export default {
@@ -39,4 +43,8 @@ export default {
     auth_bg_top,
     fb,
     google,
+    cat1,
+    cat2,
+    cat3,
+    cat4,
 };

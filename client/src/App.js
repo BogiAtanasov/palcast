@@ -7,6 +7,8 @@ import Landing from './components/pages/Landing';
 import Alert from './components/Alert';
 import Home from './components/Home';
 import Wall from './components/Wall';
+import Category from './components/Category';
+import BrowsePage from './components/BrowsePage';
 import Profile from './components/Profile';
 import UploadStream from './components/UploadStream';
 import MediaNavbar from './components/layout/MediaNavbar';
@@ -45,6 +47,8 @@ const App = () => {
           <PrivateRoute exact path='/wall' component={Wall} />
           <PrivateRoute exact path='/profile' component={Profile} />
           <PrivateRoute exact path='/studio' component={UploadStream} />
+          <PrivateRoute exact path='/browse' component={BrowsePage} />
+          <PrivateRoute exact path='/category/:category' component={Category} />
         </Switch>
       </section>
     </Fragment>

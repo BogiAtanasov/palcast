@@ -20,9 +20,8 @@ const upload = multer({storage: storage})
 // @desc Uploads mp3
 router.post('/', [auth,upload.array('uploadFiles', 2)], async (req,res) => {
   const {title, description, category} = JSON.parse(req.body.payload);
-  return;
   try {
-    let new_podcast = await pool.query("INSERT INTO podcasts (user_id,file_path,title,description,category) VALUES ($1,$2,$3,$4,$5) RETURNING *", [req.user.id, req.file.originalname,title,description,category]);
+    let new_podcast = await pool.query("INSERT INTO podcasts (user_id,file_path,title,description,category,episode_cover) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *", [req.user.id, req.files[0].originalname,title,description,category,req.files[1].originalname]);
   } catch (e) {
     console.error(e.message);
     res.status(500).send("Server Error");
