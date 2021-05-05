@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, useRef, Fragment, useEffect } from 'react';
 import Button from '../forms/Button';
 import {connect} from 'react-redux';
 import { logout } from '../../actions/auth';
@@ -14,11 +14,12 @@ const ProgressBar = ({progress}) => {
   )
 }
 
-const MediaNavbar = ({logout, isAuthenticated}) => {
-  const media = new Audio ("http://localhost:3000/uploads/test.mp3");
+const MediaNavbar = ({logout, isAuthenticated, media}) => {
   const [mediaProgress, setMediaProgressInput] = useState(0);
-
+  let podcast_media = useRef();
   useEffect(()=>{
+    podcast_media.current = new Audio("http://localhost:3000/uploads/podcasts/" + media.file);
+    podcast_media.current.play()
     console.log("Consturcted MediaNavbar");
     //
     // const interval = setInterval(() => {
@@ -27,8 +28,13 @@ const MediaNavbar = ({logout, isAuthenticated}) => {
     //   setMediaProgressInput((media.currentTime / media.duration) * 100);
     // }, 1000);
     // return () => clearInterval(interval);
-  }, []);
+  }, [media]);
 
+  useEffect(() => {
+    return () => {
+      podcast_media.current.pause()
+    };
+  }, [media]);
 
 
 
@@ -39,17 +45,17 @@ const MediaNavbar = ({logout, isAuthenticated}) => {
     <div className="media_navbar">
       Playbar Test
       <button onClick={()=>{
-        media.play();
+        podcast_media.current.play();
       }}>Play</button>
       <button onClick={()=>{
-        media.pause();
+        podcast_media.current.pause();
       }}>Pause</button>
       <button onClick={()=>{
-        console.log(media.currentTime);
-        console.log(media.duration);
+        console.log(podcast_media.current.currentTime);
+        console.log(podcast_media.current.duration);
       }}>currentTime</button>
       <button onClick={()=>{
-        media.currentTime += 10;
+        podcast_media.current.currentTime += 10;
       }}>+10</button>
       <ProgressBar progress={mediaProgress}/>
     </div>
@@ -62,7 +68,8 @@ MediaNavbar.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  media: state.media
 })
 
 export default connect(mapStateToProps, {logout})(MediaNavbar);

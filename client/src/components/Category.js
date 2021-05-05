@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import Button from './forms/Button';
 import {connect} from 'react-redux';
-import { logout } from '../actions/auth';
+import { update_media } from '../actions/media';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import Images from './Images';
 import axios from 'axios';
 import { FaPlay } from 'react-icons/fa';
-const Category = ({logout, match}) => {
+const Category = ({update_media, match}) => {
   const [podcastLists, setPodcastLists] = useState([]);
 
   const getCategory = async () => {
     try {
         const res = await axios.get('/api/catalog/category/' + match.params.category);
         setPodcastLists(res.data);
+        console.log(res.data);
     } catch (e) {
 
     }
+  }
+
+  const playMedia = (file) => {
+    update_media(file);
   }
 
   useEffect(() => {
@@ -41,7 +46,7 @@ const Category = ({logout, match}) => {
                   <h3>{elem.title}</h3>
                   <p>{elem.description}</p>
                 </div>
-                <div className="play_button">
+                <div onClick={()=>playMedia(elem.file_path)} className="play_button">
                   <FaPlay />
                 </div>
               </div>
@@ -59,7 +64,7 @@ const Category = ({logout, match}) => {
 }
 
 Category.propTypes = {
-  logout: PropTypes.func.isRequired
+  update_media: PropTypes.func.isRequired
 }
 
-export default connect(null, {logout})(Category);
+export default connect(null, {update_media})(Category);
