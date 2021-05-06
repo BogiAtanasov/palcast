@@ -46,7 +46,7 @@ const Category = ({update_media, match}) => {
                   <h3>{elem.title}</h3>
                   <p>{elem.description}</p>
                 </div>
-                <div onClick={()=>playMedia(elem.file_path)} className="play_button">
+                <div onClick={()=>playMedia(elem)} className="play_button">
                   <FaPlay />
                 </div>
               </div>

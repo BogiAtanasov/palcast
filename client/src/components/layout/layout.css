@@ -16,12 +16,17 @@
 .progress_bar{
   width: 100%;
   background: var(--gray);
-  height: 5px;
+  height: 8px;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;
+  position: relative;
 }
 
 .currentProgress{
-  height: 5px;
-  background: green;
+  height: 8px;
+  background: #FEBA38;
+  border-radius: 10px;
 }
 
 
@@ -91,4 +96,76 @@
 .studio_tabs .selected{
   color:#FEBA38;
   border-bottom: 2px solid #FEBA38
+}
+
+
+.media_navbar button{
+  color: white;
+  background: none;
+  border:none;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 5px;
+  transition: 0.2s ease all;
+}
+
+.media_navbar button:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.media_navbar .button_play{
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:8px;
+}
+
+.media_navbar .button_pause{
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:8px;
+}
+
+.media_navbar .media_navbar_buttons{
+  display: flex;
+  padding:10px 0px;
+  justify-content: center;
+}
+
+.progress_bar .timepassed{
+  position: absolute;
+  top: -25px;
+  color: white;
+}
+.progress_bar .timeleft{
+  position: absolute;
+  top: -25px;
+  right: 0;
+  color: white;
+}
+
+.media_podcast_info{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color:white;
+}
+
+.media_podcast_info_user{
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+.media_podcast_info_title{
+  font-size: 15px;
 }
