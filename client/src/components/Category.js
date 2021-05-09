@@ -14,7 +14,6 @@ const Category = ({update_media, match}) => {
     try {
         const res = await axios.get('/api/catalog/category/' + match.params.category);
         setPodcastLists(res.data);
-        console.log(res.data);
     } catch (e) {
 
     }
@@ -40,7 +39,10 @@ const Category = ({update_media, match}) => {
 
                 <div className="podcastHeaders">
                   <img className="profile_image" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
-                  <h3>{elem.first_name} {elem.last_name}</h3>
+                  <div>
+                    <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
+                    <h4>{elem.date_added}</h4>
+                  </div>
                 </div>
                 <div className="podcastDescription">
                   <h3>{elem.title}</h3>

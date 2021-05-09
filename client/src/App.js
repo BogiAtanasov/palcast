@@ -44,11 +44,11 @@ const App = () => {
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <PrivateRoute exact path='/home' component={Home} />
-          <PrivateRoute exact path='/wall' component={Wall} />
           <PrivateRoute exact path='/profile' component={Profile} />
           <PrivateRoute exact path='/studio' component={UploadStream} />
           <PrivateRoute exact path='/browse' component={BrowsePage} />
           <PrivateRoute exact path='/category/:category' component={Category} />
+          <PrivateRoute exact path='/user/:user' component={Wall} />
         </Switch>
       </section>
     </Fragment>

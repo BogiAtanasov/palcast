@@ -6,7 +6,8 @@
 
 
 .media_navbar{
-  position: absolute;
+  position: fixed;
+  z-index: 100;
   bottom: 0;
   width: 100%;
   background: var(--black);
@@ -146,12 +147,14 @@
   position: absolute;
   top: -25px;
   color: white;
+  font-size: 12px;
 }
 .progress_bar .timeleft{
   position: absolute;
   top: -25px;
   right: 0;
   color: white;
+  font-size: 12px;
 }
 
 .media_podcast_info{

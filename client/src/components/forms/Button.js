@@ -1,7 +1,7 @@
 import React from 'react';
 import './forms.css';
 
-const Button = ({text, onClick, primary, description, title}) => {
+const Button = ({text, onClick, primary, description, title, className}) => {
 
   if(description){
     return(
@@ -16,7 +16,7 @@ const Button = ({text, onClick, primary, description, title}) => {
   }
 
   return (
-    <button className={`btn ${primary && 'btn-black'}`} onClick={onClick ? ()=>onClick() : () => {}}>{text}</button>
+    <button className={`btn ${primary && 'btn-black'} ${className && className}`} onClick={onClick ? ()=>onClick() : () => {}}>{text}</button>
   )
 }
 
