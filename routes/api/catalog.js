@@ -30,9 +30,18 @@ router.get('/category/:category', auth, async (req,res) => {
 // @route GET api/catalog/user
 // @desc Uploads mp3
 router.get('/user/:user', auth, async (req,res) => {
-  console.log(req.params.user);
+  // console.log(req.params.user);
   try {
-    const podcasts =  await pool.query("SELECT * FROM podcasts WHERE user_id = $1", [req.params.user]);
+    // console.log(likes.rows);
+    let podcasts =  await pool.query("SELECT * FROM podcasts p WHERE p.user_id = $1", [req.params.user]);
+    for (var pod of podcasts.rows) {
+      let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);
+      let comments =  await pool.query("SELECT * FROM comments WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.likes = likes.rows.map((elem) => {
+        return elem.user_id;
+      });
+      pod.comments = comments.rows;
+    }
     // const podcasts =  await pool.query("SELECT * FROM podcasts");
     let podcasts_formated = podcasts.rows.map((elem)=>{
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };

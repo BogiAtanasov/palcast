@@ -7,19 +7,78 @@ import {Link} from 'react-router-dom';
 import Images from './Images';
 import axios from 'axios';
 import { MdChatBubbleOutline } from 'react-icons/md';
-import { FaPlay } from 'react-icons/fa';
-const Wall = ({update_media, match}) => {
+import { FaPlay, FaHeart } from 'react-icons/fa';
+import { IoSend } from 'react-icons/io5';
+import { BiLike, BiDislike, BiHeart, BiCommentDetail } from 'react-icons/bi';
+const Wall = ({update_media, match, auth}) => {
   const [podcastLists, setPodcastLists] = useState([]);
   const [profileInfo, setProfileInfo] = useState({});
+  const [postDropdowns, setPostDropdowns] = useState({});
+  const [comment, setComment] = useState("");
+
+  //
+  // useEffect(()=>{
+  // }, [podcastLists]);
 
   const getProfileWall = async () => {
     try {
         const res = await axios.get('/api/catalog/user/' + match.params.user);
         setPodcastLists(res.data.podcasts);
         setProfileInfo(res.data.profile);
+
+        let dropdowns = {};
+        res.data.podcasts.map((elem)=>{
+          dropdowns[elem.podcast_id] = false;
+        });
+        console.log("dropdowns",dropdowns);
+        setPostDropdowns([...dropdowns]);
     } catch (e) {
 
     }
+  }
+
+  const likePost = async (podcast_id) => {
+
+    let podcast_index = podcastLists.findIndex(x => x.podcast_id == podcast_id);
+    podcastLists[podcast_index].likes = [...podcastLists[podcast_index].likes, auth.user.user_id];
+
+    setPodcastLists([...podcastLists]);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({podcast_id: podcast_id});
+
+    const res = await axios.post('/api/interact/like', body, config);
+
+
+
+  }
+
+  const unlikePost = async (podcast_id) => {
+
+    let podcast_index = podcastLists.findIndex(x => x.podcast_id == podcast_id);
+    let user_index = podcastLists[podcast_index].likes.indexOf(auth.user.user_id);
+    if(user_index > -1){
+      podcastLists[podcast_index].likes.splice(user_index,1);
+    }
+
+    setPodcastLists([...podcastLists]);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({podcast_id: podcast_id});
+
+    const res = await axios.post('/api/interact/unlike', body, config);
+
+
   }
 
   const follow = () =>{
@@ -41,7 +100,7 @@ const Wall = ({update_media, match}) => {
       <div className="wall_page__content">
         <div className="wall_left">
           <img className="profile_image" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-          <Button className="follow_button" onClick={()=> follow() } primary text="Follow"></Button>
+          <Button className="follow_button" onClick={() => follow()} primary text="Follow"></Button>
           <div className="following_block">
             <div>
               <h4>Following</h4>
@@ -106,6 +165,28 @@ const Wall = ({update_media, match}) => {
                       </div>
 
                       <img className="episode_cover" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                      <div className="interactionBlock">
+                        <div className="likes">
+                          { auth.user && elem.likes.includes(auth.user.user_id) ?
+                            <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
+                            <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
+                          }
+                        </div>
+                        <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
+
+                      </div>
+
+                      <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
+                        <p>{elem.comments.length} Comments</p>
+                        <div style={{position: 'relative', width: "fit-content"}}>
+                          <textarea rows="6" className="writeComment" primary value={comment} iconName='mail' onChange={(value)=>setComment(value.target.value)} placeholder="Write comment"/>
+                          <div className="saveCommentButton">
+                            <Button className="follow_button" onClick={() => follow()} primary text="Post comment"></Button>
+
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
 
                   </div>
@@ -120,7 +201,12 @@ const Wall = ({update_media, match}) => {
 }
 
 Wall.propTypes = {
-  update_media: PropTypes.func.isRequired
+  update_media: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 }
 
-export default connect(null, {update_media})(Wall);
+const mapStateToProps = state => ({
+  auth: state.auth,
+})
+
+export default connect(mapStateToProps, {update_media})(Wall);
