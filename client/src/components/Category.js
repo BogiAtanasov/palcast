@@ -38,7 +38,7 @@ const Category = ({update_media, match}) => {
               <div className="podcast__left">
 
                 <div className="podcastHeaders">
-                  <img className="profile_image" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                  <img className="profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/>
                   <div>
                     <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
                     <h4>{elem.date_added}</h4>

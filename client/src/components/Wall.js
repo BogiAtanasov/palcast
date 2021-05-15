@@ -6,19 +6,22 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import Images from './Images';
 import axios from 'axios';
+import { getCurrentProfile } from '../actions/profile';
 import { MdChatBubbleOutline } from 'react-icons/md';
 import { FaPlay, FaHeart } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { BiLike, BiDislike, BiHeart, BiCommentDetail } from 'react-icons/bi';
-const Wall = ({update_media, match, auth}) => {
+const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,loading}}) => {
   const [podcastLists, setPodcastLists] = useState([]);
   const [profileInfo, setProfileInfo] = useState({});
   const [postDropdowns, setPostDropdowns] = useState({});
   const [comment, setComment] = useState("");
 
   //
-  // useEffect(()=>{
-  // }, [podcastLists]);
+  useEffect(()=>{
+    getCurrentProfile();
+
+  }, [loading]);
 
   const getProfileWall = async () => {
     try {
@@ -54,8 +57,6 @@ const Wall = ({update_media, match, auth}) => {
 
     const res = await axios.post('/api/interact/like', body, config);
 
-
-
   }
 
   const unlikePost = async (podcast_id) => {
@@ -81,6 +82,23 @@ const Wall = ({update_media, match, auth}) => {
 
   }
 
+  const addComment = async (podcast_id) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({podcast_id: podcast_id, text:comment});
+
+    const res = await axios.post('/api/interact/comment', body, config);
+    let podcast_index = podcastLists.findIndex(x => x.podcast_id == podcast_id);
+    podcastLists[podcast_index].comments = [...podcastLists[podcast_index].comments, {...res.data.comment, profile_picture: profile.profile_picture, first_name: profile.first_name, last_name: profile.last_name}];
+    setPodcastLists([...podcastLists]);
+
+    setComment("");
+  }
+
   const follow = () =>{
       console.log(profileInfo)
       console.log(podcastLists)
@@ -99,7 +117,7 @@ const Wall = ({update_media, match, auth}) => {
       <img className="wall_cover" src="https://cdn.searchenginejournal.com/wp-content/uploads/2020/02/7-tips-to-make-a-successful-podcast-5e3d9fa1ad735-760x400.png" alt=""/>
       <div className="wall_page__content">
         <div className="wall_left">
-          <img className="profile_image" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+          <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>
           <Button className="follow_button" onClick={() => follow()} primary text="Follow"></Button>
           <div className="following_block">
             <div>
@@ -148,7 +166,7 @@ const Wall = ({update_media, match, auth}) => {
                     <div className="podcast__left">
 
                       <div className="podcastHeaders">
-                        <img className="profile_image" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                        <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>
                         <div style={{position: 'relative', width: "100%"}}>
                           <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
                           <h4>{elem.date_added}</h4>
@@ -178,10 +196,26 @@ const Wall = ({update_media, match, auth}) => {
 
                       <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
                         <p>{elem.comments.length} Comments</p>
+                        <div className="comment_list">
+                          {elem.comments.length > 0 && elem.comments.map((item) => {
+                            return(
+                              <div className="comment__block">
+                                <div style={{display: 'flex'}}>
+                                  <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
+                                  <div>
+                                    <p className="comment__date_added">{item.date_added}</p>
+                                    <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
+                                  </div>
+                                </div>
+                                <p className="comment__text">{item.comment_text}</p>
+                              </div>
+                            )
+                          })}
+                        </div>
                         <div style={{position: 'relative', width: "fit-content"}}>
                           <textarea rows="6" className="writeComment" primary value={comment} iconName='mail' onChange={(value)=>setComment(value.target.value)} placeholder="Write comment"/>
                           <div className="saveCommentButton">
-                            <Button className="follow_button" onClick={() => follow()} primary text="Post comment"></Button>
+                            <Button className="follow_button" onClick={() => addComment(elem.podcast_id)} primary text="Post comment"></Button>
 
                           </div>
                         </div>
@@ -202,11 +236,14 @@ const Wall = ({update_media, match, auth}) => {
 
 Wall.propTypes = {
   update_media: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  getCurrentProfile: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  profile: state.profile
 })
 
-export default connect(mapStateToProps, {update_media})(Wall);
+export default connect(mapStateToProps, {getCurrentProfile,update_media})(Wall);

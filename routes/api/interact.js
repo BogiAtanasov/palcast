@@ -36,5 +36,24 @@ router.post('/unlike', auth, async (req,res) => {
 
 });
 
+// @route POST api/interact/comment
+// @desc Update profile
+router.post('/comment', auth, async (req,res) => {
+  const {podcast_id, text} =  req.body;
+  try {
+    let new_comment =  await pool.query("INSERT INTO comments (user_id, podcast_id, comment_text) VALUES ($1,$2,$3) RETURNING *", [req.user.id,podcast_id,text]);
+
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let d = new Date(new_comment.rows[0].date_added);
+    new_comment.rows[0].date_added = d.toLocaleDateString("en-US",options);
+
+    res.json({comment: new_comment.rows[0]});
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 
 module.exports = router;

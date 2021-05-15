@@ -17,7 +17,7 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
   if(iconName){
     iconSvg = icons[iconName]
   }
-
+  console.log(typeof(value));
 
   //Settings Input
   if(description){
@@ -27,6 +27,10 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
             <p className="title">{title}</p>
             <p className="description">{description}</p>
           </div>
+          {id == "upload-profile-picture" &&
+            <img style={{width: 140, height: 160, borderRadius: 10, objectFit: 'cover', boxShadow: "0px 3px 6px rgb(0 0 0 / 20%)", marginRight: 12}}
+            src={(typeof(value) === "object" && value !== null)? window.URL.createObjectURL(value) : `/uploads/images/${value}`} alt=""/>
+          }
           {type != "file" &&
            <input id={id && id} placeholder={placeholder} value={value} type={type ? type : "input"} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
           }

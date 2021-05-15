@@ -427,3 +427,33 @@ body{
   display: flex;
   justify-content: flex-end;
 }
+
+.comment__block{
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+  width: 400px;
+  margin: 10px 0px;
+}
+
+
+.comment__date_added{
+  margin: 0;
+  font-weight: 400;
+  font-size: 12px;
+  margin-top: 5px;
+  opacity: 0.5;
+  margin-left: 10px;
+}
+
+.comment__user{
+  margin: 0;
+  font-weight: 400;
+  font-size: 12px;
+  margin-top: 5px !important;
+  margin-left: 10px;
+}
+
+.comment__text{
+  margin-left: 55px;
+  font-weight: 400;
+  font-size: 14px;
+}

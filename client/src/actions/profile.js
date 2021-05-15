@@ -19,13 +19,22 @@ export const getCurrentProfile = () => async dispatch => {
   }
 }
 
-export const updateProfile = ({first_name, last_name}) => async dispatch => {
+export const updateProfile = ({first_name, last_name, profile_picture}) => async dispatch => {
+
+  let info = JSON.stringify({
+    first_name: first_name,
+    last_name: last_name,
+  })
+  const body = new FormData();
+  body.append("payload", info);
+  body.append("uploadFiles", profile_picture);
+
   const config = {
     headers:{
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     }
   }
-    const body = JSON.stringify({first_name, last_name});
+  
   try {
 
       const res = await axios.post('/api/profile', body, config);
