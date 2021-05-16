@@ -55,11 +55,16 @@ router.get('/user/:user', auth, async (req,res) => {
       return elem;
     });
 
+    const followers =  await pool.query("SELECT * FROM follows f LEFT JOIN profiles p ON (f.user_id = p.user_id) WHERE f.follows_user_id = $1", [req.params.user]);
+    const following =  await pool.query("SELECT * FROM follows f LEFT JOIN profiles p ON (f.user_id = p.user_id) WHERE f.user_id = $1", [req.params.user]);
+
     const profile =  await pool.query("SELECT * FROM profiles WHERE user_id = $1", [req.params.user]);
 
     let payload = {
       "podcasts" : podcasts_formated,
-      "profile" : profile.rows[0]
+      "profile" : profile.rows[0],
+      'followers' : followers.rows,
+      'following' : followers.rows,
     }
 
     res.json(payload);

@@ -258,7 +258,7 @@ body{
   margin:0px 20px;
 }
 
-.wall_left .follow_button{
+.wall_left .follow_button, .wall_left .unfollow_button{
   margin-top:20px;
 }
 

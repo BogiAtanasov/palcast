@@ -55,5 +55,33 @@ router.post('/comment', auth, async (req,res) => {
 
 });
 
+// @route POST api/interact/follow
+// @desc Follow user
+router.post('/follow', auth, async (req,res) => {
+  const {user_id} =  req.body;
+  console.log(user_id);
+  try {
+    let follow =  await pool.query("INSERT INTO follows (user_id, follows_user_id) VALUES ($1,$2) RETURNING *", [req.user.id,user_id]);
+
+    res.json({"success": true});
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route POST api/interact/follow
+// @desc Follow user
+router.post('/unfollow', auth, async (req,res) => {
+  const {user_id} =  req.body;
+  try {
+    let follow =  await pool.query("DELETE FROM follows WHERE user_id = $1 AND follows_user_id = $2 ", [req.user.id,user_id]);
+    res.json({"success": true});
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 
 module.exports = router;

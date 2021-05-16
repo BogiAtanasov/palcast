@@ -16,6 +16,9 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
   const [profileInfo, setProfileInfo] = useState({});
   const [postDropdowns, setPostDropdowns] = useState({});
   const [comment, setComment] = useState("");
+  const [followers, setFollowers] = useState([]);
+  const [followers_ids, setFollowersIds] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   //
   useEffect(()=>{
@@ -28,7 +31,14 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
         const res = await axios.get('/api/catalog/user/' + match.params.user);
         setPodcastLists(res.data.podcasts);
         setProfileInfo(res.data.profile);
+        setFollowers(res.data.followers);
+        setFollowing(res.data.following);
 
+        let follower_ids  = res.data.followers.map((elem) => {
+          return elem.user_id;
+        });
+
+        setFollowersIds([...follower_ids]);
         let dropdowns = {};
         res.data.podcasts.map((elem)=>{
           dropdowns[elem.podcast_id] = false;
@@ -99,9 +109,53 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
     setComment("");
   }
 
-  const follow = () =>{
-      console.log(profileInfo)
-      console.log(podcastLists)
+  const follow = async () =>{
+
+  setFollowersIds([...followers_ids, auth.user.user_id]);
+
+  setFollowers([...followers, {user_id: auth.user.user_id, profile_picture: profile.profile_picture}])
+
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({user_id: match.params.user});
+
+    const res = await axios.post('/api/interact/follow', body, config);
+
+
+  }
+  const unfollow = async () =>{
+
+    let temp_followers = followers_ids;
+    const index = temp_followers.indexOf(auth.user.user_id);
+    if (index > -1) {
+      temp_followers.splice(index, 1);
+    }
+    setFollowersIds([...temp_followers]);
+
+    let follower_index = followers.findIndex(x => x.user_id == auth.user.user_id);
+    console.log("followers",followers);
+    console.log("followers",follower_index);
+    if(follower_index > -1){
+      followers.splice(follower_index,1);
+    }
+
+    setFollowers([...followers]);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({user_id: match.params.user});
+
+    const res = await axios.post('/api/interact/unfollow', body, config);
+
   }
 
   const playMedia = (file) => {
@@ -118,34 +172,29 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
       <div className="wall_page__content">
         <div className="wall_left">
           <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>
-          <Button className="follow_button" onClick={() => follow()} primary text="Follow"></Button>
+          { auth.user && followers_ids.includes(auth.user.user_id) ?
+            <Button className="unfollow_button" onClick={() => unfollow()} primary text="Unfollow"></Button> :
+            <Button className="follow_button" onClick={() => follow()} primary text="Follow"></Button>
+          }
+
           <div className="following_block">
             <div>
               <h4>Following</h4>
-              <p>123</p>
+              <p>{following.length}</p>
             </div>
             <div>
               <h4>Followers</h4>
-              <p>11</p>
+              <p>{followers_ids.length}</p>
             </div>
           </div>
           <div className="followers_block">
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/>
+            {followers.map((elem) => {
+              console.log(followers);
+              return (
+                <img src={`/uploads/images/${elem.profile_picture}`} alt=""/>
+              )
+            })}
+            {/* <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""/> */}
           </div>
         </div>
         <div className="wall_right">
@@ -216,7 +265,6 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
                           <textarea rows="6" className="writeComment" primary value={comment} iconName='mail' onChange={(value)=>setComment(value.target.value)} placeholder="Write comment"/>
                           <div className="saveCommentButton">
                             <Button className="follow_button" onClick={() => addComment(elem.podcast_id)} primary text="Post comment"></Button>
-
                           </div>
                         </div>
                       </div>

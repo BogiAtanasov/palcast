@@ -38,19 +38,19 @@ const App = () => {
     <Fragment>
       <Route exact path='/' component={Landing} />
       <Navbar />
-      <section className="app">
         <Alert />
         <Switch>
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
+          <section className="app">
           <PrivateRoute exact path='/home' component={Home} />
           <PrivateRoute exact path='/profile' component={Profile} />
           <PrivateRoute exact path='/studio' component={UploadStream} />
           <PrivateRoute exact path='/browse' component={BrowsePage} />
           <PrivateRoute exact path='/category/:category' component={Category} />
           <PrivateRoute exact path='/user/:user' component={Wall} />
+          </section>
         </Switch>
-      </section>
     </Fragment>
   </Router>
 </Provider>
