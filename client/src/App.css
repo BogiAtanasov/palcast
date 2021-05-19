@@ -23,6 +23,11 @@ body{
   background: transparent;
 }
 
+.home_page__container{
+  width: 90%;
+  margin: auto;
+}
+
 .profile_page__content, .uploadstream_page__content, .browse_page__content {
   margin-top: 30px;
   padding: 20px;
@@ -456,4 +461,95 @@ body{
   margin-left: 55px;
   font-weight: 400;
   font-size: 14px;
+}
+
+
+.home_page__content{
+  display: flex;
+  justify-content: space-between;
+}
+.home_page__content nav h4, .home_page__content .feed_navbar h4{
+  margin:10px 15px;
+  font-weight: 500;
+}
+
+.home_page__left{
+  background: white;
+  flex: 0 1 33%;
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 20%);
+  border-radius: 5px;
+  height: fit-content;
+}
+
+.home_page__left nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home_page__left nav svg{
+  margin-right: 15px;
+}
+
+.home_page__right{
+  background: white;
+  flex: 0 1 64%;
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 20%);
+  border-radius: 5px;
+
+}
+
+.home_page__right .feed_navbar{
+  display: flex;
+}
+
+.home_page__content .play_button{
+  top: 50px;
+  right: -25px;
+}
+
+.home_page__content .home_page__left .podcast_block{
+  flex-direction: column;
+}
+.home_page__content .home_page__left .profile_image{
+  width: 125px;
+  height: 125px;
+  margin-bottom: 20px;
+}
+.home_page__content .podcast__bottom{
+  position: relative;
+  display: flex;
+  width: 95%;
+  margin: auto;
+  justify-content: space-evenly;
+}
+
+.home_page__content .home_page__left .podcast__top{
+  width: 95%;
+  margin: auto;
+}
+
+.home_page__content .home_page__left .podcastHeaders{
+  flex-direction: column;
+}
+.home_page__content .podcast__bottom .play_button{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  border-radius: 100%;
+  top: -20px;
+  right: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--black);
+  color: white;
+  transition: 0.2s all ease;
+}
+
+.home_page__content .home_page__left .podcast__top img{
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
 }

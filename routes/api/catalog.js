@@ -27,6 +27,47 @@ router.get('/category/:category', auth, async (req,res) => {
 
 });
 
+// @route GET api/catalog/feed
+// @desc Gets the feed for the home page of a user
+router.get('/feed', auth, async (req,res) => {
+  try {
+    const popular_podcasts = [5,3];
+
+    const podcasts =  await pool.query(
+      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+       FROM podcasts as p
+       LEFT JOIN follows as f ON (p.user_id = f.follows_user_id)
+       LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
+       WHERE f.user_id = $1
+       ORDER BY p.date_added DESC`, [req.user.id]);
+
+    const popular = await pool.query(
+      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+       FROM podcasts as p LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
+       WHERE p.podcast_id in (`+ popular_podcasts.join(",") +`)`
+    )
+    let payload = {
+      podcasts: [],
+      popular: []
+    }
+    payload.podcasts = podcasts.rows.map((elem)=>{
+      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      let d = new Date(elem.date_added);
+      elem.date_added = d.toLocaleDateString("en-US",options);
+      return elem;
+    });
+
+    payload.popular = popular.rows;
+
+    res.json(payload);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 // @route GET api/catalog/user
 // @desc Uploads mp3
 router.get('/user/:user', auth, async (req,res) => {
