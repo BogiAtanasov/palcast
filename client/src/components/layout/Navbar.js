@@ -11,20 +11,22 @@ import { Link } from 'react-router-dom';
 const Navbar = ({logout, isAuthenticated}) => {
 
 
+  const [currentPage, setCurrentPage] = useState("home");
+
   if(!isAuthenticated)return(<Fragment></Fragment>);
   return (
     <div className="navbar">
       <div className="navbar_container">
         <ul>
-          <Link to="/home"><li className="logo">Palcast</li></Link>
-          <Link to="/browse"><li>Browse</li></Link>
-          <Link to="/studio"><li>Record</li></Link>
-          <li>Support</li>
+          <Link to="/home"><li className={`${currentPage == "home" ? 'active' : ""}`} onClick={()=>setCurrentPage("home")}>Home</li></Link>
+          <Link to="/browse"><li className={`${currentPage == "browse" ? 'active' : ""}`} onClick={()=>setCurrentPage("browse")}>Browse</li></Link>
+          <Link to="/studio"><li className={`${currentPage == "record" ? 'active' : ""}`} onClick={()=>setCurrentPage("record")}>Record</li></Link>
+          <li className={`${currentPage == "support" ? 'active' : ""}`} onClick={()=>setCurrentPage("support")}>Support</li>
         </ul>
 
         <div className="navIcons" >
-            <div><FaBell/></div>
-            <Link to="/profile"><div><FaUserAlt /></div></Link>
+            <div className={`${currentPage == "notifications" ? 'active' : ""}`} onClick={()=>setCurrentPage("notifications")}><FaBell/></div>
+            <Link to="/profile"><div className={`${currentPage == "profile" ? 'active' : ""}`} onClick={()=>setCurrentPage("profile")}><FaUserAlt /></div></Link>
         </div>
       </div>
     </div>

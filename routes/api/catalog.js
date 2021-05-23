@@ -34,7 +34,7 @@ router.get('/feed', auth, async (req,res) => {
     const popular_podcasts = [5,3];
 
     const podcasts =  await pool.query(
-      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p
        LEFT JOIN follows as f ON (p.user_id = f.follows_user_id)
        LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
@@ -42,7 +42,7 @@ router.get('/feed', auth, async (req,res) => {
        ORDER BY p.date_added DESC`, [req.user.id]);
 
     const popular = await pool.query(
-      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+      `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id,p.category, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
        WHERE p.podcast_id in (`+ popular_podcasts.join(",") +`)`
     )
@@ -54,10 +54,44 @@ router.get('/feed', auth, async (req,res) => {
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       let d = new Date(elem.date_added);
       elem.date_added = d.toLocaleDateString("en-US",options);
+
       return elem;
     });
+    for(let pod of payload.podcasts){
+
+      let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.likes = likes.rows.map((elem) => {
+        return elem.user_id;
+      });
+
+      let comments = await pool.query("SELECT * FROM comments c LEFT JOIN profiles p ON (p.user_id = c.user_id) WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.comments = comments.rows.map((elem) => {
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let d = new Date(elem.date_added);
+        elem.date_added = d.toLocaleDateString("en-US",options);
+        return elem;
+      });
+
+    }
 
     payload.popular = popular.rows;
+
+    for(let pod of payload.popular){
+
+      let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.likes = likes.rows.map((elem) => {
+        return elem.user_id;
+      });
+
+      let comments = await pool.query("SELECT * FROM comments c LEFT JOIN profiles p ON (p.user_id = c.user_id) WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.comments = comments.rows.map((elem) => {
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let d = new Date(elem.date_added);
+        elem.date_added = d.toLocaleDateString("en-US",options);
+        return elem;
+      });
+
+    }
 
     res.json(payload);
 

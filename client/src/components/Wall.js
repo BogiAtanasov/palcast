@@ -10,12 +10,12 @@ import { getCurrentProfile } from '../actions/profile';
 import { MdChatBubbleOutline } from 'react-icons/md';
 import { FaPlay, FaHeart } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
-import { BiLike, BiDislike, BiHeart, BiCommentDetail } from 'react-icons/bi';
+import { BiCommentDetail } from 'react-icons/bi';
 const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,loading}}) => {
   const [podcastLists, setPodcastLists] = useState([]);
   const [profileInfo, setProfileInfo] = useState({});
   const [postDropdowns, setPostDropdowns] = useState({});
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState({});
   const [followers, setFollowers] = useState([]);
   const [followers_ids, setFollowersIds] = useState([]);
   const [following, setFollowing] = useState([]);
@@ -98,15 +98,15 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
         'Content-Type': 'application/json'
       }
     }
+    setComment({...comment, [podcast_id]: ""});
 
-    const body = JSON.stringify({podcast_id: podcast_id, text:comment});
+    const body = JSON.stringify({podcast_id: podcast_id, text:comment[podcast_id]});
 
     const res = await axios.post('/api/interact/comment', body, config);
     let podcast_index = podcastLists.findIndex(x => x.podcast_id == podcast_id);
     podcastLists[podcast_index].comments = [...podcastLists[podcast_index].comments, {...res.data.comment, profile_picture: profile.profile_picture, first_name: profile.first_name, last_name: profile.last_name}];
     setPodcastLists([...podcastLists]);
 
-    setComment("");
   }
 
   const follow = async () =>{
@@ -165,6 +165,12 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
   useEffect(() => {
     getProfileWall();
   }, []);
+
+  const handleKeyDown = (podcast_id) => (event) =>{
+    if (event.key === 'Enter') {
+      addComment(podcast_id);
+    }
+  }
 
   return (
     <div className="wall_page wall_page__container">
@@ -226,51 +232,52 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
 
                       </div>
                       <div className="podcastDescription">
-                        <h3>{elem.title}</h3>
+                        <h3>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+
                         <p>{elem.description}</p>
 
                       </div>
 
                       <img className="episode_cover" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
-                      <div className="interactionBlock">
-                        <div className="likes">
-                          { auth.user && elem.likes.includes(auth.user.user_id) ?
-                            <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
-                            <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
-                          }
-                        </div>
-                        <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
 
-                      </div>
 
-                      <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
-                        <p>{elem.comments.length} Comments</p>
-                        <div className="comment_list">
-                          {elem.comments.length > 0 && elem.comments.map((item) => {
-                            return(
-                              <div className="comment__block">
-                                <div style={{display: 'flex'}}>
-                                  <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
-                                  <div>
-                                    <p className="comment__date_added">{item.date_added}</p>
-                                    <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
-                                  </div>
-                                </div>
-                                <p className="comment__text">{item.comment_text}</p>
-                              </div>
-                            )
-                          })}
-                        </div>
-                        <div style={{position: 'relative', width: "fit-content"}}>
-                          <textarea rows="6" className="writeComment" primary value={comment} iconName='mail' onChange={(value)=>setComment(value.target.value)} placeholder="Write comment"/>
-                          <div className="saveCommentButton">
-                            <Button className="follow_button" onClick={() => addComment(elem.podcast_id)} primary text="Post comment"></Button>
-                          </div>
-                        </div>
+
+                    </div>
+                    <div className="interactionBlock">
+                      <div className="likes">
+                        { auth.user && elem.likes.includes(auth.user.user_id) ?
+                          <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
+                          <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
+                        }
                       </div>
+                      <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
 
                     </div>
 
+                    <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
+                      <p>{elem.comments.length} Comments</p>
+                      <div className="comment_list">
+                        {elem.comments.length > 0 && elem.comments.map((item) => {
+                          return(
+                            <div className="comment__block">
+                              <div style={{display: 'flex'}}>
+                                <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
+                                <div>
+                                  <p className="comment__date_added">{item.date_added}</p>
+                                  <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
+                                </div>
+                              </div>
+                              <p className="comment__text">{item.comment_text}</p>
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                    </div>
+                    <div className="writeCommentB">
+                      <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture}`}/>
+                      <input type="text" value={comment[elem.podcast_id]} onChange={(value)=>setComment({...comment, [elem.podcast_id]:value.target.value})} onKeyDown={handleKeyDown(elem.podcast_id)} placeholder="Write comment..." />
+                    </div>
                   </div>
                 )
               })}

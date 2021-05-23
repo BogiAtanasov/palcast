@@ -44,14 +44,17 @@
   margin:auto;
   justify-content: space-between;
   display: flex;
-
-
+  height: 55px;
+  align-items: center;
 }
 
 .navbar ul{
   display: flex;
   text-decoration: none;
   list-style-type: none;
+  align-items: center;
+  height: 100%;
+  padding-left: 0;
 }
 
 .navbar ul a{
@@ -61,6 +64,19 @@
 
 .navbar ul li{
   margin: 0px 20px;
+  padding: 5px 20px;
+
+}
+
+
+.navbar .active{
+  background: black;
+  color: white;
+  border-radius: 5px;
+}
+
+.navbar .active svg{
+  color: white;
 }
 
 .navIcons{
@@ -70,7 +86,9 @@
 }
 
 .navIcons div{
-  margin: 0 20px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .navIcons svg{
