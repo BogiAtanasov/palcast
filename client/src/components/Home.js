@@ -213,7 +213,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                     </div> */}
                   </div>
                   <div className="writeCommentB">
-                    <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture}`}/>
+                    <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture ? profile.profile_picture : ""}`}/>
                     <input type="text" value={comment[elem.podcast_id]} onChange={(value)=>setComment({...comment, [elem.podcast_id]:value.target.value})} onKeyDown={handleKeyDown(elem.podcast_id)} placeholder="Write comment..." />
                   </div>
                 </div>

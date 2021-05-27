@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import FormData from 'form-data';
 
+
 const UploadStream = ({auth}) => {
 
   const[formData, setFormData] = useState({
@@ -39,12 +40,7 @@ const UploadStream = ({auth}) => {
           }
       });
   };
-  const uploadFile = () => {
 
-  };
-  const uploadEpisodeCover = () => {
-
-  };
 
   return (
     <div className="uploadstream_page uploadstream_page__container">
@@ -69,10 +65,12 @@ const UploadStream = ({auth}) => {
 
         {selectedTab == "stream" &&
         <div className="profile__form">
-          <Input value={formData.email} onChange={(value)=>setFormData({...formData, email:value})} title="Name" description="Set the title of the podcast"/>
-          <Input value={formData.password} onChange={(value)=>setFormData({...formData, password:value})} title="Category" description="Set the category of the podcast"/>
+          <Input value={formData.title} onChange={(value)=>setFormData({...formData, title:value})} title="Name" description="Set the title of the podcast"/>
+          <Input value={formData.category} onChange={(value)=>setFormData({...formData, category:value})} title="Category" description="Set the category of the podcast"/>
 
-          <Button onClick={()=> submitForm() } primary text="Update Profile"></Button>
+          <Link to={`/stream?room=${formData.title}`}>
+            <Button primary text="Update Profile"></Button>
+          </Link>
         </div>
         }
       </div>
