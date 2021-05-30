@@ -17,7 +17,6 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
   if(iconName){
     iconSvg = icons[iconName]
   }
-  console.log(typeof(value));
 
   //Settings Input
   if(description){

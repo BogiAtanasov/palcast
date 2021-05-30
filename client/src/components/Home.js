@@ -104,6 +104,14 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
     }
   }
 
+  if(profile == null){
+    return(
+      <div>
+        Loading
+      </div>
+    )
+  }
+
   return (
     <div className="home_page home_page__container">
       <h1>Hey Jack</h1>

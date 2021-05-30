@@ -9,6 +9,10 @@ const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
 const bodyParser = require('body-parser');
 
+const usersVideo = {};
+
+const socketToRoom = {};
+
 app.use(cors());
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -40,6 +44,40 @@ io.on('connection', (socket) => {
 
   })
 
+  // example usersVideo =  array(
+  //   'RoomTest' => [
+  //     qwe123123edasdasd,
+  //     asdasewqe213123ra,
+  //     bvwereq3413221eda,
+  //   ],
+  //   'BestRoom' => [
+  //     pytrkmer452341eda,
+  //     vbkdmbn3nejqne341
+  //    ]
+  // )
+  socket.on("join-video", roomID => {
+    if (usersVideo[roomID]) {
+        usersVideo[roomID].push(socket.id);
+    } else {
+        usersVideo[roomID] = [socket.id];
+    }
+    socketToRoom[socket.id] = roomID;
+
+    //  Gets all users in the specific room except current user
+    const videoUsersInRoom = usersVideo[roomID].filter(id => id !== socket.id);
+
+    socket.emit("all users", videoUsersInRoom);
+  });
+
+  socket.on("sending signal", payload => {
+      io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+  });
+
+  socket.on("returning signal", payload => {
+      io.to(payload.callerID).emit('receiving returned signal', { signal: payload.signal, id: socket.id });
+  });
+
+  //Send chat message
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id);
     io.to(user.room).emit('message', { user: user.user_id, text: message, profile: user.profile });
@@ -50,8 +88,16 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
 
+    //video
+    const roomID = socketToRoom[socket.id];
+    let room = usersVideo[roomID];
+    if (room) {
+        room = room.filter(id => id !== socket.id);
+        usersVideo[roomID] = room;
+    }
+
     if(user) {
-      io.to(user.room).emit('message', { user: 'Admin', text: `${user.user_id} has left.` });
+      io.to(user.room).emit('message', { user: 'admin', text: `${user.user_id} has left.` });
       io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
     }
   })

@@ -10,6 +10,7 @@ import Wall from './components/Wall';
 import Category from './components/Category';
 import BrowsePage from './components/BrowsePage';
 import LiveStream from './components/LiveStream';
+import LiveStreamMiddleware from './components/LiveStreamMiddleware';
 import Profile from './components/Profile';
 import UploadStream from './components/UploadStream';
 import MediaNavbar from './components/layout/MediaNavbar';
@@ -21,6 +22,8 @@ import { Provider } from 'react-redux';
 import store from './store';
 import setAuthToken from './utils/setAuthToken'
 import {loadUser} from './actions/auth';
+import { getCurrentProfile } from './actions/profile';
+
 
 if(localStorage.token){
   setAuthToken(localStorage.token);
@@ -30,6 +33,7 @@ const App = () => {
 
   useEffect(()=>{
     store.dispatch(loadUser());
+    store.dispatch(getCurrentProfile());
   }, []);
 
   return(
@@ -47,7 +51,7 @@ const App = () => {
           <PrivateRoute exact path='/home' component={Home} />
           <PrivateRoute exact path='/profile' component={Profile} />
           <PrivateRoute exact path='/studio' component={UploadStream} />
-          <PrivateRoute exact path='/stream' component={LiveStream} />
+          <PrivateRoute exact path='/stream' component={LiveStreamMiddleware} />
           <PrivateRoute exact path='/browse' component={BrowsePage} />
           <PrivateRoute exact path='/category/:category' component={Category} />
           <PrivateRoute exact path='/user/:user' component={Wall} />
