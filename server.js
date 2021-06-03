@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
     callback();
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect user', () => {
     const user = removeUser(socket.id);
 
     //video
@@ -96,10 +96,14 @@ io.on('connection', (socket) => {
         usersVideo[roomID] = room;
     }
 
+    socket.broadcast.emit('user left', socket.id);
+
     if(user) {
       io.to(user.room).emit('message', { user: 'admin', text: `${user.user_id} has left.` });
       io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
     }
+
+
   })
 });
 

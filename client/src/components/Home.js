@@ -231,7 +231,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
             })}
           </div>
         </div>
-        {/* <Button onClick={()=> logout() } primary text="Logout"></Button> */}
+        <Button onClick={()=> logout() } primary text="Logout"></Button>
       </div>
     </div>
   )
