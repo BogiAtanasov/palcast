@@ -55,22 +55,26 @@ io.on('connection', (socket) => {
   //     vbkdmbn3nejqne341
   //    ]
   // )
-  socket.on("join-video", roomID => {
+  socket.on("join-video", async ({room:roomID, user_id}) => {
+
+    const profile = await pool.query("SELECT * FROM profiles WHERE user_id = $1", [user_id]);
+
     if (usersVideo[roomID]) {
-        usersVideo[roomID].push(socket.id);
+        usersVideo[roomID].push({socket:socket.id, user_id: user_id, profile:profile.rows[0]});
     } else {
-        usersVideo[roomID] = [socket.id];
+        usersVideo[roomID] = [{socket:socket.id, user_id: user_id, profile:profile.rows[0]}];
     }
     socketToRoom[socket.id] = roomID;
-
     //  Gets all users in the specific room except current user
-    const videoUsersInRoom = usersVideo[roomID].filter(id => id !== socket.id);
+    const videoUsersInRoom = usersVideo[roomID].filter(elem => elem.socket !== socket.id);
 
     socket.emit("all users", videoUsersInRoom);
   });
 
-  socket.on("sending signal", payload => {
-      io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
+  socket.on("sending signal", async payload => {
+    const profile = await pool.query("SELECT * FROM profiles WHERE user_id = $1", [payload.user_id]);
+
+    io.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID, user:payload.user_id, profile:profile.rows[0] });
   });
 
   socket.on("returning signal", payload => {
@@ -92,7 +96,7 @@ io.on('connection', (socket) => {
     const roomID = socketToRoom[socket.id];
     let room = usersVideo[roomID];
     if (room) {
-        room = room.filter(id => id !== socket.id);
+        room = room.filter(id => id.socket !== socket.id);
         usersVideo[roomID] = room;
     }
 

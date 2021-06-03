@@ -26,9 +26,7 @@ const Video = (props) => {
     }, []);
 
     return (
-        <div>
-        <video style={{height:250, width:250, objectFit: 'contain'}} playsInline autoPlay ref={ref} />
-      </div>
+        <video playsInline autoPlay ref={ref} />
       );
 }
 
@@ -72,9 +70,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
     userVideo.current.srcObject = stream;
 
 
-    socketRef.current.emit("join-video", room);
-
-    console.log("THIS USE EFFECT IS CALLED TWICE LIVESTREAM <<<<")
+    socketRef.current.emit("join-video", {room, user_id:auth.user.user_id});
 
     // Once a new user has joined, Server fires all users which returns a list of all users in the call
     // For each user in the list, creates a peer for the new user with each user in the video_users list
@@ -82,16 +78,20 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
     socketRef.current.on("all users", video_users => {
         console.log("all users");
         const peers_temp = [];
-        video_users.forEach(userID => {
-            const peer = createPeer(userID, socketRef.current.id, stream);
+        video_users.forEach(user => {
+            const peer = createPeer(user.socket, socketRef.current.id, stream);
             peersRef.current.push({
-                peerID: userID,
+                peerID: user.socket,
                 peer,
+                user: user.user_id,
+                profile: user.profile
             })
 
             peers_temp.push({
-              peerID: userID,
-              peer
+              peerID: user.socket,
+              peer,
+              user: user.user_id,
+              profile: user.profile
             });
         })
         console.log("All users handler before push", peers);
@@ -102,16 +102,20 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
     // This event is recived by all users currently in the voice chat
     // and a connection is made to the new user
     socketRef.current.on("user joined", payload => {
-        console.log("User joined", peers);
+        console.log("User joined", payload);
         const peer = addPeer(payload.signal, payload.callerID, stream);
         peersRef.current.push({
             peerID: payload.callerID,
             peer,
+            user: payload.user,
+            profile: payload.profile
         })
 
         const peerObj = {
           peer,
-          peerID: payload.callerID
+          peerID: payload.callerID,
+          user: payload.user_id,
+          profile: payload.profile,
         }
         console.log("peers before push user joined", peers);
         peers.push(peerObj);
@@ -180,7 +184,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
 
     peer.on("signal", signal => {
         console.log("createPeer signaling user:", userToSignal, " my caller id is:", callerID);
-        socketRef.current.emit("sending signal", { userToSignal, callerID, signal })
+        socketRef.current.emit("sending signal", { userToSignal, callerID, signal, user_id: auth.user.user_id })
     })
 
     return peer;
@@ -222,24 +226,24 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
   }
 
   return (
-    <div>
+    <div className="livestream__page">
       {console.log("rendering", peers)}
-      <div style={{display: "flex"}}>
-        <p>My id: {socketRef.current ? socketRef.current.id : ""}</p>
-      <video style={{width:250, height: 250, objectFit: 'contain'}} muted ref={userVideo} autoPlay playsInline />
+      <div className="livevideo_container">
+      <div className="videoBlock">
+        <video muted ref={userVideo} autoPlay playsInline />
       </div>
-      <LiveVideo myStream={userVideo} peers={peers}/>
       {peersRef.current.map((peer, index) => {
           console.log("writing peer",peer);
           return (
-          <div key={peer.peerID} style={{display: 'flex'}}>
-              <p>{peer.peerID}</p>
-
+          <div className="videoBlock" key={peer.peerID} style={{display: 'flex', alignItems: "center", flexDirection:"column"}}>
               <Video key={peer.peerID} peer={peer.peer} />
+              <div>
+                <span>{peer.profile.first_name}</span> <span>{peer.profile.last_name}</span>
+              </div>
           </div>
           );
       })}
-
+    </div>
     <LiveChat messages={messages} currentProfile={profile} sendMessage={(message)=>sendMessage(message)}/>
     </div>
   )
