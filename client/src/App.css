@@ -819,3 +819,11 @@ width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
+
+.feed_navbar .selected {
+    color: #FEBA38;
+}
+
+.feed_navbar h4{
+  cursor: pointer;
+}

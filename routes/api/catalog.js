@@ -46,9 +46,15 @@ router.get('/feed', auth, async (req,res) => {
        FROM podcasts as p LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
        WHERE p.podcast_id in (`+ popular_podcasts.join(",") +`)`
     )
+
+    const livestreams = await pool.query(
+      'SELECT * FROM livestreams l LEFT JOIN profiles p ON (l.user_id = p.user_id)'
+    )
+
     let payload = {
       podcasts: [],
-      popular: []
+      popular: [],
+      livestreams: []
     }
     payload.podcasts = podcasts.rows.map((elem)=>{
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -57,6 +63,15 @@ router.get('/feed', auth, async (req,res) => {
 
       return elem;
     });
+
+    payload.livestreams = livestreams.rows.map((elem)=>{
+      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      let d = new Date(elem.date_added);
+      elem.date_added = d.toLocaleDateString("en-US",options);
+      return elem;
+    });
+
+
     for(let pod of payload.podcasts){
 
       let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);

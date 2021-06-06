@@ -13,7 +13,9 @@ import { BiCommentDetail } from 'react-icons/bi';
 const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,loading}}) => {
   const [podcastLists, setPodcastLists] = useState([]);
   const [popularList, setPopularList] = useState([]);
+  const [livestreamList, setLivestreamList] = useState([]);
   const [postDropdowns, setPostDropdowns] = useState({});
+  const [tabSelected, setTab] = useState("following");
   const [comment, setComment] = useState({});
 
   const getInitialFeed = async () => {
@@ -21,6 +23,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
         const res = await axios.get('/api/catalog/feed');
         setPodcastLists(res.data.podcasts);
         setPopularList(res.data.popular);
+        setLivestreamList(res.data.livestreams)
     } catch (e) {
 
     }
@@ -154,11 +157,11 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
         </div>
         <div className="home_page__right">
           <div className="feed_navbar">
-            <h4>Following</h4>
-            <h4>Live Shows</h4>
+            <h4 onClick={()=>setTab("following")} className={`${tabSelected == "following" ? "selected" : ""}`}>Following</h4>
+            <h4 onClick={()=>setTab("livestreams")} className={`${tabSelected == "livestreams" ? "selected" : ""}`}>Live Shows</h4>
           </div>
           <div className="feed_content">
-            {podcastLists.length > 0 && podcastLists.map((elem) => {
+            {(tabSelected === "following" && podcastLists.length > 0 ) && podcastLists.map((elem) => {
               return (
                 <div className="podcast_block__container">
                   <div className="podcast_block">
@@ -229,9 +232,55 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
 
               )
             })}
+
+            {(tabSelected === "livestreams" && livestreamList.length > 0 ) && livestreamList.map((elem) => {
+              return (
+                <div className="podcast_block__container">
+                  <div className="podcast_block">
+                    <div className="podcast__left">
+
+                      <div className="podcastHeaders">
+                        <img className="profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/>
+                        <div>
+                          <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
+                          <h4>{elem.date_added}</h4>
+                        </div>
+                      </div>
+                      <div className="podcastDescription">
+                        <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+                        <p>{elem.description}</p>
+                      </div>
+                      <Link to={`/stream?room=${elem.title}`}>
+                        <div className="play_button">
+                          <FaPlay />
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="podcast__right">
+                      <img src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+
+
+              )
+            })}
+
+            {(tabSelected === "livestreams" && livestreamList.length === 0 ) &&
+              <div style={{minHeight:500, display:'flex', justifyContent:'center'}} className="podcast_block__container">
+                <h4 style={{fontWeight:400}}>There are no live podcasts</h4>
+              </div>
+
+              }
+
+
           </div>
         </div>
-        <Button onClick={()=> logout() } primary text="Logout"></Button>
+        {/* <Button onClick={()=> logout() } primary text="Logout"></Button> */}
       </div>
     </div>
   )

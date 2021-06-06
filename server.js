@@ -102,9 +102,16 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('user left', socket.id);
 
+    var usersInRoom = [];
     if(user) {
+      usersInRoom = getUsersInRoom(user.room);
+
       io.to(user.room).emit('message', { user: 'admin', text: `${user.user_id} has left.` });
-      io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room)});
+      io.to(user.room).emit('roomData', { room: user.room, users: usersInRoom});
+    }
+
+    if(usersInRoom.length === 0){
+       pool.query("DELETE FROM livestreams WHERE title = $1", [roomID]);
     }
 
 
