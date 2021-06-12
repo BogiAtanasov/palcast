@@ -5,6 +5,7 @@ import { update_media } from '../actions/media';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import Images from './Images';
+import Inbox from './Inbox';
 import axios from 'axios';
 import { getCurrentProfile } from '../actions/profile';
 import { MdChatBubbleOutline } from 'react-icons/md';
@@ -19,8 +20,9 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
   const [followers, setFollowers] = useState([]);
   const [followers_ids, setFollowersIds] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [inboxOpened, openInbox] = useState(false);
+  const [messages, setMessages] = useState([]);
 
-  //
   useEffect(()=>{
     getCurrentProfile();
 
@@ -206,14 +208,12 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
         <div className="wall_right">
           <div style={{display: 'flex', alignItems: "center"}}>
             <h4 className="user_name" ><span>{profileInfo.first_name}</span> <span>{profileInfo.last_name}</span></h4>
-            <div className="chatBubble">
+            <div onClick={()=>{openInbox(!inboxOpened)}} className="chatBubble" style={{background: `${inboxOpened ? "white" : "black"}`, color: `${inboxOpened ? "black" : "white"}`}}>
               <MdChatBubbleOutline />
             </div>
           </div>
           <div className="feed">
-            <div className="feed_navbar">
 
-            </div>
             <div className="feed_content">
               {podcastLists.length > 0 && podcastLists.map((elem) => {
                 return (
@@ -281,6 +281,13 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
                   </div>
                 )
               })}
+            </div>
+            <div className="inbox" style={{overflow: 'hidden', maxWidth: `${inboxOpened ? "1000px" : "0px"}`}}>
+              {console.log("User Profile Render", profileInfo)}
+              {(profileInfo && profile) &&
+
+                <Inbox messages={messages} userProfile={profileInfo} myProfile={profile} receiver={match.params.user}/>
+              }
             </div>
           </div>
         </div>

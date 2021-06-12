@@ -83,5 +83,18 @@ router.post('/unfollow', auth, async (req,res) => {
   }
 });
 
+// @route POST api/interact/sendMessage
+// @desc Send direct message
+router.post('/sendMessage', auth, async (req,res) => {
+  const {receiver_user_id, message} =  req.body;
+  try {
+    let messages =  await pool.query("INSERT INTO inbox_messages (sender_user_id, reciever_user_id, message_text) VALUES ($1,$2,$3) RETURNING *", [req.user.id,receiver_user_id, message]);
+    res.json({"success": true});
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 
 module.exports = router;

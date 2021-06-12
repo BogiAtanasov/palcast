@@ -7,6 +7,7 @@ import Landing from './components/pages/Landing';
 import Alert from './components/Alert';
 import Home from './components/Home';
 import Wall from './components/Wall';
+import Inbox from './components/Inbox';
 import Category from './components/Category';
 import BrowsePage from './components/BrowsePage';
 import LiveStream from './components/LiveStream';
@@ -55,6 +56,7 @@ const App = () => {
           <PrivateRoute exact path='/browse' component={BrowsePage} />
           <PrivateRoute exact path='/category/:category' component={Category} />
           <PrivateRoute exact path='/user/:user' component={Wall} />
+          <PrivateRoute exact path='/message/:user' component={Inbox} />
           </section>
         </Switch>
     </Fragment>

@@ -66,4 +66,21 @@ router.get('/user/:user_id', auth, async (req,res) => {
 });
 
 
+// @route GET api/profile/messageHistory
+// @desc Get profile
+router.post('/messageHistory', auth, async (req,res) => {
+  const {user_id} =  req.body;
+  try {
+    const messages =  await pool.query("SELECT * FROM inbox_messages WHERE (reciever_user_id = $1 AND sender_user_id = $2) OR (reciever_user_id = $2 AND sender_user_id = $1)", [user_id,req.user.id]);
+
+    res.json(messages.rows);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
+
 module.exports = router;

@@ -827,3 +827,18 @@ width: 100%;
 .feed_navbar h4{
   cursor: pointer;
 }
+.wall_page .feed{
+  display: flex;
+}
+
+.wall_page .livechat_container{
+  margin: 0;
+  margin-left: 20px;
+}
+
+.wall_page .feed_content{
+  flex: 1;
+}
+.wall_page .inbox{
+  transition: 0.2s ease all;
+}
