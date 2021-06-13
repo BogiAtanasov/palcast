@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Input from './forms/Input';
 import Button from './forms/Button';
 import LiveChat from './LiveChat';
+import SuggestionBox from './SuggestionBox';
 import LiveVideo from './LiveVideo';
 import {connect} from 'react-redux';
 import { getCurrentProfile, updateProfile } from '../actions/profile';
@@ -244,6 +245,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
           );
       })}
     </div>
+    <SuggestionBox />
     <LiveChat messages={messages} currentProfile={profile} sendMessage={(message)=>sendMessage(message)}/>
     </div>
   )

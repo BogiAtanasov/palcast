@@ -25,7 +25,7 @@ const Landing = () => {
             <li><Link to="">Browse</Link></li>
             <li><Link to="">Features</Link></li>
             <li><Link to="">Support</Link></li>
-            <li><Link to="/register" className="signUpNav">Sign up</Link></li>
+            <li><Link to="/login" className="signUpNav">Sign in</Link></li>
           </ul>
         </nav>
 

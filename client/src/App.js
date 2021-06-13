@@ -17,6 +17,7 @@ import UploadStream from './components/UploadStream';
 import MediaNavbar from './components/layout/MediaNavbar';
 import Navbar from './components/layout/Navbar';
 import PrivateRoute from './components/routing/PrivateRoute';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 //Redux
 import { Provider } from 'react-redux';
@@ -25,7 +26,7 @@ import setAuthToken from './utils/setAuthToken'
 import {loadUser} from './actions/auth';
 import { getCurrentProfile } from './actions/profile';
 
-
+const news_key = 'd5143f3e263544a38035daaefb2e2b05';
 if(localStorage.token){
   setAuthToken(localStorage.token);
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const auth = require('../../middleware/auth');
 const router = express.Router();
 const pool = require("../../db");
+const axios = require('axios');
 
 // @route GET api/catalog/category
 // @desc Uploads mp3
@@ -158,6 +159,23 @@ router.get('/user/:user', auth, async (req,res) => {
     }
 
     res.json(payload);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
+// @route POST api/catalog/suggestions
+// @desc Gets suggestions from newsapi.org
+router.post('/suggestions', auth, async (req,res) => {
+  const {category} =  req.body;
+  try {
+    const news_result = await axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=d5143f3e263544a38035daaefb2e2b05&category=' + category);
+    let news = news_result.data;
+
+    res.json(news);
 
   } catch (e) {
     console.error(e.message);

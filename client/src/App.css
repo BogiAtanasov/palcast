@@ -679,7 +679,7 @@ body{
   background: #4bfbaa;
 }
 
-.livechat_container{
+.livechat_container, .suggestions_container{
   margin: 20px;
   min-width: 500px;
   background: white;
@@ -687,6 +687,8 @@ body{
   border-radius: 7px;
   overflow: hidden;
   box-shadow: rgb(0 0 0 / 10%) 0px 10px 15px -3px, rgb(0 0 0 / 5%) 0px 4px 6px -2px;
+  height: max-content;
+  max-height: 600px;
 }
 
 .chat_profile_picture{
@@ -767,7 +769,7 @@ width: 100%;
   order:2;
 }
 
-.livechat_header{
+.livechat_header, .suggestion_header{
   font-size: 16px;
   border-bottom: 1px solid rgba(0,0,0,0.05);
   padding-left: 25px;
@@ -780,24 +782,24 @@ width: 100%;
   margin-bottom: 5px;
 }
 
-.livechat_container .messagesContainer{
+.livechat_container .messagesContainer, .suggestions{
   max-height: 500px;
   overflow-y: scroll;
   padding: 20px 0px;
 }
 
-.messagesContainer::-webkit-scrollbar-track
+.messagesContainer::-webkit-scrollbar-track, .suggestions::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
 }
-.messagesContainer::-webkit-scrollbar
+.messagesContainer::-webkit-scrollbar, .suggestions::-webkit-scrollbar
 {
 	width: 6px;
 	background-color: #F5F5F5;
 }
 
-.messagesContainer::-webkit-scrollbar-thumb
+.messagesContainer::-webkit-scrollbar-thumb, .suggestions::-webkit-scrollbar-thumb
 {
 	background-color: #000000;
 }
@@ -841,4 +843,58 @@ width: 100%;
 }
 .wall_page .inbox{
   transition: 0.2s ease all;
+}
+
+.suggestions_container{
+  max-width: 500px;
+}
+
+.suggestion_categories{
+  padding: 0px 25px   ;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.suggestion_category{
+  font-size: 12px;
+  padding:5px 10px;
+  border: 1px solid rgba(0,0,0,0.15);
+  margin: 5px;
+  border-radius: 3px;
+  transition: 0.2s ease all;
+}
+
+.suggestion_category:hover{
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.selected_category{
+  background: black;
+  color: white;
+}
+
+.spinner_container{
+  margin:20px;
+  display: flex;
+  justify-content: center;
+}
+
+.suggestionLink a{
+  text-decoration: none;
+  font-size: 12px;
+  color: black;
+}
+
+.suggestionLink a:hover{
+  color: #FEBA38;
+}
+
+.suggestions{
+  padding: 0 18px;
+}
+
+.suggestions .suggestionLink:last-child{
+  padding-bottom:20px;
 }
