@@ -242,3 +242,84 @@ input[type="checkbox"]:checked + .checkbox:active::before{
   background: rgba(var(--theme-color), 0.1);
   transform: scale(1);
 }
+
+.notificationList{
+  margin: 0;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  max-width: 300px;
+  background: white;
+  color: black;
+  width: 300px;
+  margin-right: 0px !important;
+  font-size: 12px;
+  box-shadow: rgb(0 0 0 / 10%) 0px 10px 15px -3px, rgb(0 0 0 / 5%) 0px 4px 6px -2px;
+  height: fit-content;
+  overflow-y: scroll;
+}
+
+.navIcons .notificationBlock{
+  position: relative;
+}
+
+.notificationBlock:hover{
+  cursor: pointer;
+}
+
+.notification_pp{
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.notificationRow{
+  display: flex;
+  align-items: center;
+  margin-bottom:20px !important;
+  position: relative;
+  padding:0px !important;
+}
+
+.notificationRow p{
+  margin-left: 10px;
+}
+
+.newDot{
+  width: 7px;
+  height: 7px;
+  background: #ff6b6b;
+  left: -13px;
+  position: absolute;
+  border-radius: 100%;
+}
+
+.unread{
+  position: absolute;
+  font-size: 12px;
+  background: red;
+  color: white;
+  border-radius: 100% !important;
+  padding:0 !important;
+  width:15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top:0;
+}
+
+.notification_info{
+  padding:0px !important;
+}
+
+.notification_info p:first-child{
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.notification_info p{
+  padding: 0;
+  margin:2px;
+}

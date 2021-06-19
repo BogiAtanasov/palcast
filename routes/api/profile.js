@@ -82,5 +82,42 @@ router.post('/messageHistory', auth, async (req,res) => {
 
 });
 
+// @route GET api/profile/notifications
+// @desc Gets last 10 notifications
+router.get('/notifications', auth, async (req,res) => {
+
+  try {
+    const notifications =  await pool.query("SELECT * FROM notifications n LEFT JOIN profiles p ON (p.user_id = n.initiator_id) WHERE receiver_id = $1 ORDER BY date_added DESC LIMIT 10", [req.user.id]);
+    console.log(notifications.rows);
+    for(let notif of notifications.rows){
+      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      let d = new Date(notif.date_added);
+      notif.date_added = d.toLocaleDateString("en-US",options);
+    }
+
+    res.json(notifications.rows);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
+// @route GET api/profile/updateNotifications
+// @desc Updates the sent notifications as seen
+router.post('/updateNotifications', auth, (req,res) => {
+  const notificationList =  req.body.notificationList.join(',');
+  try {
+
+    pool.query("UPDATE notifications SET seen=true WHERE notification_id in ("+ notificationList +")", []);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 
 module.exports = router;
