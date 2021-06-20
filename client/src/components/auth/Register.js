@@ -23,7 +23,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const submitForm = async e => {
 
     const newUser = {
-      username: nameInput,
       email: emailInput,
       password: passwordInput,
       firstName: firstNameInput,
@@ -40,7 +39,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
     // const res = await axios.post('api/users', body, config);
 
-    register({username: newUser.username, email:newUser.email, password:newUser.password, firstName:newUser.firstName, lastName:newUser.lastName });
+    register({email:newUser.email, password:newUser.password, firstName:newUser.firstName, lastName:newUser.lastName });
 
     } catch (e) {
       console.error(e.response.data);
@@ -73,7 +72,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <img src={Images.google} alt=""/>
           </div>
           <h4>or use your email for registration</h4>
-          <Input primary value={nameInput} iconName='profile' onChange={(value)=>setNameInput(value)} placeholder="Username"/>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
           <Input primary value={passwordInput} iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
           <Input primary value={firstNameInput} iconName='profile' onChange={(value)=>setFirstNameInput(value)} placeholder="First Name"/>

@@ -55,7 +55,7 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
   let podcast_media = useRef();
   useEffect(()=>{
     if(media.file != null){
-      podcast_media.current = new Audio("http://localhost:3000/uploads/podcasts/" + media.file.file_path);
+      podcast_media.current = new Audio("http://palcast.net/uploads/podcasts/" + media.file.file_path);
       playAudio();
     }
     // const interval = setInterval(() => {

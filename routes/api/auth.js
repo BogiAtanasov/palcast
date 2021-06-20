@@ -22,8 +22,8 @@ router.get('/', auth, async (req,res) => {
 // @route POST api/auth
 // @desc Login user & get token
 router.post('/', async (req,res) => {
-  const {email,password} = req.body;
 
+  const {email,password} = req.body;
   if(!password){
     return res.status(400).json({error: {msg:"Password is required", code: 'PASSWORD_EMPTY'}});
   }
