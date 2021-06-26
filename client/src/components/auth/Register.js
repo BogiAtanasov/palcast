@@ -73,7 +73,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           </div>
           <h4>or use your email for registration</h4>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
-          <Input primary value={passwordInput} iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
+          <Input primary value={passwordInput} type="password" iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
           <Input primary value={firstNameInput} iconName='profile' onChange={(value)=>setFirstNameInput(value)} placeholder="First Name"/>
           <Input primary value={lastNameInput} iconName='profile' onChange={(value)=>setLastNameInput(value)} placeholder="Last Name"/>
           <Button onClick={()=> submitForm() } primary text="Sign up"></Button>

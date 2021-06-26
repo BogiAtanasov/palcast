@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './forms.css';
-import { MdSearch } from "react-icons/md";
+import { MdSearch, MdRemoveRedEye } from "react-icons/md";
 import { FaUser, FaLock } from "react-icons/fa";
 import { HiMail } from "react-icons/hi";
 
@@ -10,6 +10,7 @@ const icons = {
   'profile' : <FaUser />,
   'mail' : <HiMail />,
   'password' : <FaLock className="icon__password"/>,
+  'eye' : <MdRemoveRedEye/>,
 }
 
 const Input = ({iconName, placeholder, onChange, primary, secondary, value, title, description, type, id}) => {
@@ -17,6 +18,9 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
   if(iconName){
     iconSvg = icons[iconName]
   }
+
+  const [revealPassword, setReveal] = useState(false);
+
 
   //Settings Input
   if(description){
@@ -51,7 +55,23 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
   //Register/Login Input
   return (
     <div className={`input ${primary && 'input__primary'} ${secondary && 'input__secondary'}`}>
-    <input placeholder={placeholder} value={value} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
+
+    {type != "password" &&
+      <input placeholder={placeholder} value={value} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
+    }
+
+    {type == "password" &&
+      <input placeholder={placeholder} type={revealPassword ?  "input" : "password" } value={value} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
+    }
+
+    {type == "password" &&
+      <div className="revealPassword" style={{opacity: `${value ? revealPassword ? "1" : "0.3" : "0"}`}} onClick={()=>setReveal(!revealPassword)}>
+        {
+          icons['eye']
+        }
+      </div>
+    }
+
     {iconSvg && iconSvg}
     </div>
   )
