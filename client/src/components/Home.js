@@ -117,7 +117,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
 
   return (
     <div className="home_page home_page__container">
-      <h1>Hey Jack</h1>
+      <h1>Hey {profile.first_name}</h1>
       <div className="home_page__content">
         <div className="home_page__left">
             <nav>

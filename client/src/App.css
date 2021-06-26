@@ -12,11 +12,13 @@ body{
   width: 90%;
   margin: auto;
   background: white;
+  padding-bottom: 75px;
 }
 
 .catalog_page__container{
   box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
   border-radius: 5px;
+  padding-bottom: 75px;
 }
 
 .browse_page__container{
@@ -26,6 +28,7 @@ body{
 .home_page__container{
   width: 90%;
   margin: auto;
+  padding-bottom: 75px;
 }
 
 .profile_page__content, .uploadstream_page__content, .browse_page__content {
@@ -224,7 +227,7 @@ body{
 }
 
 .wall_page__container{
-
+  padding-bottom: 75px;
 }
 
 .wall_cover{

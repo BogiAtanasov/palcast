@@ -11,14 +11,14 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
-export const register = ({username, email, password, firstName, lastName}) => async dispatch => {
+export const register = ({email, password, firstName, lastName}) => async dispatch => {
   const config = {
     headers:{
       'Content-Type': 'application/json'
     }
   }
 
-  const body = JSON.stringify({username, email, password, firstName, lastName});
+  const body = JSON.stringify({email, password, firstName, lastName});
 
   try {
     const res = await axios.post('/api/users',body,config);

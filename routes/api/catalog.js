@@ -7,7 +7,7 @@ const axios = require('axios');
 // @route GET api/catalog/category
 // @desc Uploads mp3
 router.get('/category/:category', auth, async (req,res) => {
-  console.log(req.params.category);
+
   try {
     const podcasts =  await pool.query("SELECT * FROM podcasts as po LEFT JOIN profiles as pr ON (po.user_id = pr.user_id) WHERE category = $1", [req.params.category]);
     // const podcasts =  await pool.query("SELECT * FROM podcasts");
@@ -18,7 +18,7 @@ router.get('/category/:category', auth, async (req,res) => {
       return elem;
     });
 
-    console.log(payload);
+
     res.json(payload);
 
   } catch (e) {
@@ -34,14 +34,13 @@ router.get('/feed', auth, async (req,res) => {
   try {
     const popular_podcasts = [5,3];
 
-    const podcasts =  await pool.query(
+    var podcasts =  await pool.query(
       `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p
        LEFT JOIN follows as f ON (p.user_id = f.follows_user_id)
        LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
        WHERE f.user_id = $1
        ORDER BY p.date_added DESC`, [req.user.id]);
-
     const popular = await pool.query(
       `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id,p.category, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
@@ -51,6 +50,42 @@ router.get('/feed', auth, async (req,res) => {
     const livestreams = await pool.query(
       'SELECT * FROM livestreams l LEFT JOIN profiles p ON (l.user_id = p.user_id)'
     )
+
+    //Get more podcasts if the feed query returns less than 10
+    if(podcasts.rows.length < 10){
+
+      let podcast_ids = podcasts.rows.map((elem) => {
+        return elem.podcast_id;
+      });
+
+      if(podcast_ids.length === 0){
+        var suggested_podcasts  = await pool.query(
+          `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+           FROM podcasts as p
+           LEFT JOIN follows as f ON (p.user_id = f.follows_user_id)
+           LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
+           ORDER BY p.date_added DESC
+           LIMIT $1`, [10-podcasts.rows.length]);
+      }else{
+        var suggested_podcasts  = await pool.query(
+          `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
+           FROM podcasts as p
+           LEFT JOIN follows as f ON (p.user_id = f.follows_user_id)
+           LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)` +
+           `WHERE p.podcast_id not in (`+ podcast_ids.join(",") + `) ` +
+           `ORDER BY p.date_added DESC
+           LIMIT $1`, [10-podcasts.rows.length]);
+      }
+
+
+
+      for(let pod of suggested_podcasts.rows){
+        pod['suggested'] = true;
+      }
+        console.log("Test4");
+      podcasts.rows = [...podcasts.rows, ...suggested_podcasts.rows];
+
+    }
 
     let payload = {
       podcasts: [],
