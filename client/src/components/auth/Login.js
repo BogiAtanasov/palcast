@@ -66,7 +66,7 @@ const Login = ({ login, isAuthenticated, loading }) => {
           </div>
           <h4>or use your email account</h4>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
-          <Input primary value={passwordInput} iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
+          <Input primary value={passwordInput} type="password" iconName='password' onChange={(value)=>setPasswordInput(value)} placeholder="Password"/>
           <Button onClick={()=> submitForm() } primary text="Sign in"></Button>
         </div>
       </div>
