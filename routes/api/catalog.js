@@ -32,8 +32,13 @@ router.get('/category/:category', auth, async (req,res) => {
 // @desc Gets the feed for the home page of a user
 router.get('/feed', auth, async (req,res) => {
   try {
-    const popular_podcasts = [5,3];
+    const popular_podcasts_query = await pool.query(`SELECT count(like_id),podcast_id from likes GROUP BY podcast_id ORDER BY count(like_id) DESC`);
+    var popular_podcasts = [];
+    for(let ind in popular_podcasts_query.rows){
+      if(ind > 1)break;
 
+      popular_podcasts.push(popular_podcasts_query.rows[ind].podcast_id);
+    }
     var podcasts =  await pool.query(
       `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p

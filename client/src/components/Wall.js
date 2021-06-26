@@ -216,70 +216,70 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
 
             <div className="feed_content">
               {podcastLists.length > 0 && podcastLists.map((elem) => {
-                return (
-                  <div className="podcast_block">
-                    <div className="podcast__left">
+                  return (
+                    <div className="podcast_block">
+                      <div className="podcast__left">
 
-                      <div className="podcastHeaders">
-                        <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>
-                        <div style={{position: 'relative', width: "100%"}}>
-                          <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
-                          <h4>{elem.date_added}</h4>
-                          <div onClick={()=>playMedia(elem)} className="play_button">
-                            <FaPlay />
+                        <div className="podcastHeaders">
+                          <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>
+                          <div style={{position: 'relative', width: "100%"}}>
+                            <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
+                            <h4>{elem.date_added}</h4>
+                            <div onClick={()=>playMedia(elem)} className="play_button">
+                              <FaPlay />
+                            </div>
                           </div>
+
+                        </div>
+                        <div className="podcastDescription">
+                          <h3>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+
+                          <p>{elem.description}</p>
+
+                        </div>
+
+                        <img className="episode_cover" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+
+
+
+                      </div>
+                      <div className="interactionBlock">
+                        <div className="likes">
+                          { auth.user && elem.likes.includes(auth.user.user_id) ?
+                            <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
+                            <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
+                          }
+                        </div>
+                        <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
+
+                      </div>
+
+                      <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
+                        <p>{elem.comments.length} Comments</p>
+                        <div className="comment_list">
+                          {elem.comments.length > 0 && elem.comments.map((item) => {
+                            return(
+                              <div className="comment__block">
+                                <div style={{display: 'flex'}}>
+                                  <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
+                                  <div>
+                                    <p className="comment__date_added">{item.date_added}</p>
+                                    <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
+                                  </div>
+                                </div>
+                                <p className="comment__text">{item.comment_text}</p>
+                              </div>
+                            )
+                          })}
                         </div>
 
                       </div>
-                      <div className="podcastDescription">
-                        <h3>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
-
-                        <p>{elem.description}</p>
-
+                      <div className="writeCommentB">
+                        <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture}`}/>
+                        <input type="text" value={comment[elem.podcast_id]} onChange={(value)=>setComment({...comment, [elem.podcast_id]:value.target.value})} onKeyDown={handleKeyDown(elem.podcast_id)} placeholder="Write comment..." />
                       </div>
-
-                      <img className="episode_cover" src={`/uploads/images/${elem.episode_cover}`} alt=""/>
-
-
-
                     </div>
-                    <div className="interactionBlock">
-                      <div className="likes">
-                        { auth.user && elem.likes.includes(auth.user.user_id) ?
-                          <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
-                          <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
-                        }
-                      </div>
-                      <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
-
-                    </div>
-
-                    <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
-                      <p>{elem.comments.length} Comments</p>
-                      <div className="comment_list">
-                        {elem.comments.length > 0 && elem.comments.map((item) => {
-                          return(
-                            <div className="comment__block">
-                              <div style={{display: 'flex'}}>
-                                <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
-                                <div>
-                                  <p className="comment__date_added">{item.date_added}</p>
-                                  <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
-                                </div>
-                              </div>
-                              <p className="comment__text">{item.comment_text}</p>
-                            </div>
-                          )
-                        })}
-                      </div>
-
-                    </div>
-                    <div className="writeCommentB">
-                      <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture}`}/>
-                      <input type="text" value={comment[elem.podcast_id]} onChange={(value)=>setComment({...comment, [elem.podcast_id]:value.target.value})} onKeyDown={handleKeyDown(elem.podcast_id)} placeholder="Write comment..." />
-                    </div>
-                  </div>
-                )
+                  )
               })}
             </div>
             <div className="inbox" style={{overflow: 'hidden', maxWidth: `${inboxOpened ? "1000px" : "0px"}`}}>

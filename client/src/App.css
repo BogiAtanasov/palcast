@@ -901,3 +901,14 @@ width: 100%;
 .suggestions .suggestionLink:last-child{
   padding-bottom:20px;
 }
+
+.suggestedHeader{
+  font-weight: 400;
+  background: #bbbbbb;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 3px 10px;
+  color: white;
+  margin-top: 5px;
+  border-radius: 5px;
+}

@@ -162,6 +162,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
           </div>
           <div className="feed_content">
             {(tabSelected === "following" && podcastLists.length > 0 ) && podcastLists.map((elem) => {
+              if(elem.suggested === undefined){
               return (
                 <div className="podcast_block__container">
                   <div className="podcast_block">
@@ -216,12 +217,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         )
                       })}
                     </div>
-                    {/* <div style={{position: 'relative', width: "fit-content"}}>
-                      <textarea rows="6" className="writeComment" primary value={comment} iconName='mail' onChange={(value)=>setComment(value.target.value)} placeholder="Write comment"/>
-                      <div className="saveCommentButton">
-                        <Button className="follow_button" onClick={() => addComment(elem.podcast_id)} primary text="Post comment"></Button>
-                      </div>
-                    </div> */}
+
                   </div>
                   <div className="writeCommentB">
                     <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture ? profile.profile_picture : ""}`}/>
@@ -230,7 +226,79 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                 </div>
 
 
-              )
+              )}
+            })}
+
+            { podcastLists.filter((elem) => elem.suggested !== undefined).length > 0 &&
+              <div style={{display: 'flex', justifyContent: "center"}}><h4 className="suggestedHeader"> Suggested Podcasts </h4></div>
+            }
+
+            {(tabSelected === "following" && podcastLists.length > 0 ) && podcastLists.map((elem) => {
+              if(elem.suggested !== undefined){
+              return (
+                <div className="podcast_block__container">
+                  <div className="podcast_block">
+                    <div className="podcast__left">
+
+                      <div className="podcastHeaders">
+                        <img className="profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/>
+                        <div>
+                          <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
+                          <h4>{elem.date_added}</h4>
+                        </div>
+                      </div>
+                      <div className="podcastDescription">
+                        <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+                        <p>{elem.description}</p>
+                      </div>
+                      <div onClick={()=>playMedia(elem)} className="play_button">
+                        <FaPlay />
+                      </div>
+                    </div>
+                    <div className="podcast__right">
+                      <img src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                    </div>
+
+                  </div>
+                  <div className="interactionBlock">
+                    <div className="likes">
+                      { auth.user && elem.likes.includes(auth.user.user_id) ?
+                        <div onClick={() => unlikePost(elem.podcast_id)} className="unlike"><FaHeart />{elem.likes.length}</div> :
+                        <div onClick={() => likePost(elem.podcast_id)} className="like"><FaHeart />{elem.likes.length}</div>
+                      }
+                    </div>
+                    <div onClick={()=> setPostDropdowns({...postDropdowns, [elem.podcast_id]: !postDropdowns[elem.podcast_id]})} className="comments"><BiCommentDetail/> {elem.comments.length}</div>
+
+                  </div>
+
+                  <div className="commentDropdown" style={{maxHeight: `${postDropdowns[elem.podcast_id] ? "1000px" : "0px"}`}}>
+                    <p>{elem.comments.length} Comments</p>
+                    <div className="comment_list">
+                      {elem.comments.length > 0 && elem.comments.map((item) => {
+                        return(
+                          <div className="comment__block">
+                            <div style={{display: 'flex'}}>
+                              <img style={{width:45, height: 45, objectFit: 'cover', borderRadius: "100%"}} src={`/uploads/images/${item.profile_picture}`} alt=""/>
+                              <div>
+                                <p className="comment__date_added">{item.date_added}</p>
+                                <p className="comment__user"><span>{item.first_name}</span> <span>{item.last_name}</span></p>
+                              </div>
+                            </div>
+                            <p className="comment__text">{item.comment_text}</p>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                  </div>
+                  <div className="writeCommentB">
+                    <img className="write_profile_picture" src={`/uploads/images/${profile.profile_picture ? profile.profile_picture : ""}`}/>
+                    <input type="text" value={comment[elem.podcast_id]} onChange={(value)=>setComment({...comment, [elem.podcast_id]:value.target.value})} onKeyDown={handleKeyDown(elem.podcast_id)} placeholder="Write comment..." />
+                  </div>
+                </div>
+
+
+              )}
             })}
 
             {(tabSelected === "livestreams" && livestreamList.length > 0 ) && livestreamList.map((elem) => {
