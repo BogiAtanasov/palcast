@@ -5,7 +5,9 @@ import { logout } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import podcast from '../../assets/podcast/test.mp3'
 import './layout.css';
-import { FaBell, FaUserAlt } from "react-icons/fa";
+import { FaBell, FaUserAlt, FaCog } from "react-icons/fa";
+import { MdHome } from "react-icons/md";
+import { HiLogout } from "react-icons/hi";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,6 +16,7 @@ const Navbar = ({logout, user, isAuthenticated}) => {
   const [currentPage, setCurrentPage] = useState("home");
   const [notifications, setNotifications] = useState([]);
   const [notificationDropdown, toggleNotifications] = useState(false);
+  const [profileDropdown, toggleProfile] = useState(false);
   const [unread, setUnread] = useState(false);
   const dropdownRef = useRef(false);
 
@@ -107,7 +110,19 @@ const Navbar = ({logout, user, isAuthenticated}) => {
             </div>
             }
             </div>
-            <Link to="/profile"><div className={`${currentPage == "profile" ? 'active' : ""}`} onClick={()=>setCurrentPage("profile")}><FaUserAlt /></div></Link>
+
+              <div style={{position: 'relative'}} className={`${currentPage == "profile" ? 'active' : ""}`} onClick={()=>{
+                toggleProfile(!profileDropdown);
+              }}>
+                <FaUserAlt />
+                {profileDropdown &&
+                <div className="profileDropdown">
+                  <li onClick={()=>setCurrentPage("browse")}><MdHome/><Link to={`/user/` + user.user_id} >My Wall</Link></li>
+                  <li onClick={()=>setCurrentPage("profile")}><Link to="/profile"><FaCog />Profile Settings</Link></li>
+                  <li onClick={()=> logout() }><HiLogout/>Logout</li>
+                </div>
+                }
+              </div>
         </div>
       </div>
     </div>

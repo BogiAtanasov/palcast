@@ -91,6 +91,10 @@
   border-radius: 5px;
 }
 
+.navIcons div:hover{
+  cursor: pointer;
+}
+
 .navIcons svg{
   color: black;
 }
@@ -257,6 +261,62 @@ input[type="checkbox"]:checked + .checkbox:active::before{
   box-shadow: rgb(0 0 0 / 10%) 0px 10px 15px -3px, rgb(0 0 0 / 5%) 0px 4px 6px -2px;
   height: fit-content;
   overflow-y: scroll;
+}
+
+.profileDropdown{
+  margin: 0;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  max-width: 150px;
+  width: 150px;
+  background: white;
+  color: black;
+  margin-right: 0px !important;
+  font-size: 12px;
+  box-shadow: rgb(0 0 0 / 10%) 0px 10px 15px -3px, rgb(0 0 0 / 5%) 0px 4px 6px -2px;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+
+.profileDropdown li{
+  list-style: none;
+  margin: 10px 0px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: 0.2s ease all;
+}
+
+.profileDropdown li:hover{
+  opacity: 1;
+}
+.profileDropdown li:nth-child(1) svg{
+  width: 25px;
+  height: 20px;
+  margin-right:5px;
+  color: black;
+}
+.profileDropdown li:nth-child(2) svg{
+  width: 25px;
+  height: 15px;
+  margin-right:5px;
+  color: black;
+
+}
+.profileDropdown li:nth-child(3) svg{
+  width: 25px;
+  height: 18px;
+  margin-right:5px;
+  color: black;
+
+}
+
+.profileDropdown a{
+  text-decoration: none;
+  color: black;
 }
 
 .navIcons .notificationBlock{
