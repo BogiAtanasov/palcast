@@ -176,7 +176,7 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
 
   return (
     <div className="wall_page wall_page__container">
-      <img className="wall_cover" src="https://cdn.searchenginejournal.com/wp-content/uploads/2020/02/7-tips-to-make-a-successful-podcast-5e3d9fa1ad735-760x400.png" alt=""/>
+      <img className="wall_cover" src={`/uploads/images/${profileInfo.cover_photo}`} alt=""/>
       <div className="wall_page__content">
         <div className="wall_left">
           <img className="profile_image" src={`/uploads/images/${profileInfo.profile_picture}`} alt=""/>

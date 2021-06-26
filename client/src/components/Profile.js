@@ -15,7 +15,8 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
       first_name: '',
       last_name: '',
       profile_id: '',
-      profile_picture: null
+      profile_picture: null,
+      cover_photo: null,
   });
 
   const[test,setTest] = useState("");
@@ -30,6 +31,7 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
         last_name: loading || !profile.last_name ? "" : profile.last_name,
         profile_id: loading || !profile.profile_id ? "" : profile.profile_id,
         profile_picture: loading || !profile.profile_picture ? "" : profile.profile_picture,
+        cover_photo: loading || !profile.cover_photo ? "" : profile.cover_photo,
       });
     }
 
@@ -37,7 +39,7 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
   }, [loading]);
 
   const submitForm = () => {
-    updateProfile({first_name: formData.first_name, last_name:formData.last_name, profile_picture:formData.profile_picture});
+    updateProfile({first_name: formData.first_name, last_name:formData.last_name, profile_picture:formData.profile_picture, cover_photo: formData.cover_photo });
   };
 
   return (
@@ -58,6 +60,11 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
         <Input value={formData.profile_picture} type="file" onChange={(value)=>{
           setFormData({...formData, profile_picture:value});
         }} title="Upload File" description="Set the profile photo for your account" id="upload-profile-picture"/>
+
+        <Input value={formData.cover_photo} type="file" onChange={(value)=>{
+          setFormData({...formData, cover_photo:value});
+        }} title="Upload File" description="Set the cover photo of your account" id="upload-cover-photo"/>
+
         <Button onClick={()=> submitForm() } primary text="Update Profile"></Button>
 
         </div>

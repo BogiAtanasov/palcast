@@ -37,10 +37,17 @@ router.get('/me', auth, async (req,res) => {
 router.post('/', [auth,upload.array('uploadFiles', 2)], async (req,res) => {
   const {first_name, last_name} =  JSON.parse(req.body.payload);
   try {
-    let profile =  await pool.query("UPDATE profiles SET (first_name, last_name, profile_picture) = ($1,$2,$4) WHERE user_id = $3 RETURNING *", [first_name,last_name,req.user.id,req.files[0].originalname]);
+    let profile =  await pool.query("UPDATE profiles SET (first_name, last_name) = ($1,$2) WHERE user_id = $3 RETURNING *", [first_name,last_name,req.user.id]);
     if(profile.rowCount === 0){
-      profile = await pool.query("INSERT INTO profiles (user_id, first_name, last_name, profile_picture) VALUES ($1,$2,$3,$4) RETURNING *", [req.user.id,first_name,last_name,req.files[0].originalname]);
+      profile = await pool.query("INSERT INTO profiles (user_id, first_name, last_name) VALUES ($1,$2,$3) RETURNING *", [req.user.id,first_name,last_name]);
     }
+    if(req.files.length > 0){
+      profile =  await pool.query("UPDATE profiles SET profile_picture = $2 WHERE user_id = $1 RETURNING *", [req.user.id, req.files[0].originalname]);
+    }
+    if(req.files.length > 1){
+      profile =  await pool.query("UPDATE profiles SET cover_photo= $2 WHERE user_id = $1 RETURNING *", [req.user.id, req.files[1].originalname]);
+    }
+
     res.json(profile.rows[0]);
 
   } catch (e) {
@@ -88,7 +95,6 @@ router.get('/notifications', auth, async (req,res) => {
 
   try {
     const notifications =  await pool.query("SELECT * FROM notifications n LEFT JOIN profiles p ON (p.user_id = n.initiator_id) WHERE receiver_id = $1 ORDER BY date_added DESC LIMIT 10", [req.user.id]);
-    console.log(notifications.rows);
     for(let notif of notifications.rows){
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       let d = new Date(notif.date_added);

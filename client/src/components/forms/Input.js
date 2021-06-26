@@ -30,6 +30,10 @@ const Input = ({iconName, placeholder, onChange, primary, secondary, value, titl
             <img style={{width: 140, height: 160, borderRadius: 10, objectFit: 'cover', boxShadow: "0px 3px 6px rgb(0 0 0 / 20%)", marginRight: 12}}
             src={(typeof(value) === "object" && value !== null)? window.URL.createObjectURL(value) : `/uploads/images/${value}`} alt=""/>
           }
+          {id == "upload-cover-photo" &&
+            <img style={{width: 140, height: 160, borderRadius: 10, objectFit: 'cover', boxShadow: "0px 3px 6px rgb(0 0 0 / 20%)", marginRight: 12}}
+            src={(typeof(value) === "object" && value !== null)? window.URL.createObjectURL(value) : `/uploads/images/${value}`} alt=""/>
+          }
           {type != "file" &&
            <input id={id && id} placeholder={placeholder} value={value} type={type ? type : "input"} onChange={onChange ? (val)=>onChange(val.target.value) : () => {}} />
           }
