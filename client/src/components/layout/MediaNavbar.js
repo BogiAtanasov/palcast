@@ -119,8 +119,11 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
 
       {media.file &&
       <div className="media_podcast_info">
-        <div className="media_podcast_info_title" >{media.file.title}</div>
-        <div className="media_podcast_info_user">{media.file.first_name}<span> </span>{media.file.last_name}</div>
+        <img className="navbar_episode_cover" src={`/uploads/images/${media.file.episode_cover}`} alt=""/>
+        <div>
+          <div className="media_podcast_info_title" >{media.file.title}</div>
+          <div className="media_podcast_info_user">{media.file.first_name}<span> </span>{media.file.last_name}</div>
+        </div>
       </div>
       }
 

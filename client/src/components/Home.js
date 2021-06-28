@@ -13,6 +13,9 @@ import { BiCommentDetail } from 'react-icons/bi';
 const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,loading}}) => {
   const [podcastLists, setPodcastLists] = useState([]);
   const [popularList, setPopularList] = useState([]);
+  const [mostActiveUsers, setMostActiveUsers] = useState([]);
+  const [newUsers, setNewUsers] = useState([]);
+  const [followingList, setFollowings] = useState([]);
   const [livestreamList, setLivestreamList] = useState([]);
   const [postDropdowns, setPostDropdowns] = useState({});
   const [tabSelected, setTab] = useState("following");
@@ -24,6 +27,9 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
         setPodcastLists(res.data.podcasts);
         setPopularList(res.data.popular);
         setLivestreamList(res.data.livestreams)
+        setMostActiveUsers(res.data.active_users)
+        setFollowings(res.data.followings)
+        setNewUsers(res.data.recent_users)
     } catch (e) {
 
     }
@@ -107,6 +113,22 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
     }
   }
 
+  const followUser = async (id) =>{
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({user_id: id});
+
+    const res = await axios.post('/api/interact/follow', body, config);
+
+    setFollowings([...followingList, id]);
+
+  }
+
   if(profile == null){
     return(
       <div>
@@ -117,12 +139,13 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
 
   return (
     <div className="home_page home_page__container">
-      <h1>Hey {profile.first_name}</h1>
+
+      <h1 style={{paddingLeft: '3.2%', fontWeight: '400'}}>Hey {profile.first_name},</h1>
       <div className="home_page__content">
         <div className="home_page__left">
+
             <nav>
-              <h4>Popular Today</h4>
-              <FaStar />
+              <h4 style={{marginLeft:'10%', fontSize: 14}}>Popular Today</h4>
             </nav>
             {popularList.length > 0 && popularList.map((elem) => {
               return (
@@ -132,19 +155,16 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                   </div>
                   <div className="podcast__bottom">
 
-                    <div style={{flex: "0 1 25%", alignItems: "center", transform: "translateY(-70px)"}} className="podcastHeaders">
+                    <div  className="podcastHeaders">
                       <img className="profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/>
                       <div>
-                        <Link to={`/user/` + elem.user_id} ><h3>{elem.first_name} {elem.last_name}</h3></Link>
+                        <Link to={`/user/` + elem.user_id} ><h3 >{elem.first_name} {elem.last_name}</h3></Link>
                         {/* <h4>{elem.date_added}</h4> */}
+                        <h3 style={{opacity: '0.5'}}>{elem.title}</h3>
+                        <span style={{marginLeft:0}} className={`badge badge-${elem.category}`}>{elem.category}</span>
                       </div>
                     </div>
-                    <div style={{flex: "0 1 50%"}} className="podcastDescription">
-                      <h3>{elem.title}</h3>
-                      <span style={{marginLeft:0}} className={`badge badge-${elem.category}`}>{elem.category}</span>
 
-                      <p>{elem.description}</p>
-                    </div>
                     <div onClick={()=>playMedia(elem)} className="play_button">
                       <FaPlay />
                     </div>
@@ -179,12 +199,15 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
                         <p>{elem.description}</p>
                       </div>
-                      <div onClick={()=>playMedia(elem)} className="play_button">
-                        <FaPlay />
-                      </div>
+
                     </div>
                     <div className="podcast__right">
                       <img src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                      <div onClick={()=>playMedia(elem)} className="play_button_container">
+                        <div className="play_button">
+                          <FaPlay />
+                        </div>
+                      </div>
                     </div>
 
                   </div>
@@ -251,12 +274,15 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
                         <p>{elem.description}</p>
                       </div>
-                      <div onClick={()=>playMedia(elem)} className="play_button">
-                        <FaPlay />
-                      </div>
+
                     </div>
                     <div className="podcast__right">
                       <img src={`/uploads/images/${elem.episode_cover}`} alt=""/>
+                      <div onClick={()=>playMedia(elem)} className="play_button_container">
+                        <div className="play_button">
+                          <FaPlay />
+                        </div>
+                      </div>
                     </div>
 
                   </div>
@@ -346,6 +372,51 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
               }
 
 
+          </div>
+        </div>
+        <div className="home_page__third">
+          <h4 style={{fontSize: 14, fontWeight:'400', margin: '10px 15px', marginLeft:'10%'}}>Most active users</h4>
+          <div className="most_active_block">
+          {mostActiveUsers.map((elem) => {
+            return(
+              <div className="most_active_user">
+                <Link to={`/user/` + elem.user_id} ><img className="active_profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/></Link>
+                <div className="most_active_info">
+                  <Link to={`/user/` + elem.user_id} >
+                    <p style={{fontWeight:'500'}}><span>{elem.first_name}</span> <span>{elem.last_name}</span></p>
+                    <p style={{opacity: '0.5'}}><span>{elem.count} {elem.count > 1 ? "podcasts" : "podcast"}</span></p>
+                  </Link>
+                </div>
+                {followingList.includes(elem.user_id) ?
+                <p className="most_active_follow">Following</p>
+                :
+                <p onClick={()=>followUser(elem.user_id)} className="most_active_follow most_active_follow_action">Follow</p>
+                }
+              </div>
+            )
+          })}
+          </div>
+
+          <h4 style={{fontSize: 14, fontWeight:'400', margin: '10px 15px', marginLeft:'10%'}}>Newly registered users</h4>
+          <div className="most_active_block">
+          {newUsers.map((elem) => {
+            return(
+              <div className="most_active_user">
+                <Link to={`/user/` + elem.user_id} ><img className="active_profile_image" src={`/uploads/images/${elem.profile_picture}`} alt=""/></Link>
+                <div className="most_active_info">
+                  <Link to={`/user/` + elem.user_id} >
+                    <p style={{fontWeight:'500'}}><span>{elem.first_name}</span> <span>{elem.last_name}</span></p>
+                    <p style={{opacity: '0.5'}}><span>{elem.count} {elem.count > 1 ? "podcasts" : "podcast"}</span></p>
+                  </Link>
+                </div>
+                {followingList.includes(elem.user_id) ?
+                <p className="most_active_follow">Following</p>
+                :
+                <p onClick={()=>followUser(elem.user_id)} className="most_active_follow most_active_follow_action">Follow</p>
+                }
+              </div>
+            )
+          })}
           </div>
         </div>
         {/* <Button onClick={()=> logout() } primary text="Logout"></Button> */}

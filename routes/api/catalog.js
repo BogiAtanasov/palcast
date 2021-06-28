@@ -39,6 +39,47 @@ router.get('/feed', auth, async (req,res) => {
 
       popular_podcasts.push(popular_podcasts_query.rows[ind].podcast_id);
     }
+
+    const most_active_query = await pool.query(`SELECT count(podcast_id),user_id from podcasts GROUP BY user_id ORDER BY count(podcast_id) DESC LIMIT 5`);
+    var most_active_users = [];
+    for(let elem of most_active_query.rows){
+      most_active_users.push(elem.user_id);
+    }
+
+    const most_recent_query = await pool.query(`SELECT * from profiles ORDER BY profile_id DESC LIMIT 5`);
+
+    const followings = await pool.query(`SELECT follows_user_id from follows WHERE user_id = $1`, [req.user.id]);
+    const following_users = followings.rows.map((elem) => elem.follows_user_id);
+
+    var most_active_user_profiles = [];
+    if(most_active_users.length > 0){
+      most_active_user_profiles = await pool.query(
+        `SELECT * from profiles
+         WHERE user_id in (`+ most_active_users.join(",") +`)`
+      );
+
+      for(let user of most_active_user_profiles.rows){
+        if(following_users.includes(user.user_id)){
+          user["follows"] = true;
+        }else{
+          user["follows"] = false;
+        }
+
+        let find_user = most_active_query.rows.filter(elem => elem.user_id == user.user_id);
+        user["count"] = find_user[0].count;
+      }
+    }
+
+    for(let user of most_recent_query.rows){
+      if(following_users.includes(user.user_id)){
+        user["follows"] = true;
+      }else{
+        user["follows"] = false;
+      }
+    }
+
+
+
     var podcasts =  await pool.query(
       `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p
@@ -46,6 +87,7 @@ router.get('/feed', auth, async (req,res) => {
        LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
        WHERE f.user_id = $1
        ORDER BY p.date_added DESC`, [req.user.id]);
+
     const popular = await pool.query(
       `SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.user_id,p.category, pr.first_name, pr.last_name, pr.profile_picture
        FROM podcasts as p LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)
@@ -87,7 +129,7 @@ router.get('/feed', auth, async (req,res) => {
       for(let pod of suggested_podcasts.rows){
         pod['suggested'] = true;
       }
-        console.log("Test4");
+
       podcasts.rows = [...podcasts.rows, ...suggested_podcasts.rows];
 
     }
@@ -95,7 +137,10 @@ router.get('/feed', auth, async (req,res) => {
     let payload = {
       podcasts: [],
       popular: [],
-      livestreams: []
+      livestreams: [],
+      followings: following_users ? following_users : [],
+      active_users: most_active_user_profiles.rows ? most_active_user_profiles.rows : [],
+      recent_users: most_recent_query.rows ? most_recent_query.rows : [],
     }
     payload.podcasts = podcasts.rows.map((elem)=>{
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -195,7 +240,7 @@ router.get('/user/:user', auth, async (req,res) => {
       "podcasts" : podcasts_formated,
       "profile" : profile.rows[0],
       'followers' : followers.rows,
-      'following' : followers.rows,
+      'following' : following.rows,
     }
 
     res.json(payload);
