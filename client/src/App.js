@@ -13,6 +13,7 @@ import BrowsePage from './components/BrowsePage';
 import LiveStream from './components/LiveStream';
 import LiveStreamMiddleware from './components/LiveStreamMiddleware';
 import Profile from './components/Profile';
+import Support from './components/Support';
 import UploadStream from './components/UploadStream';
 import MediaNavbar from './components/layout/MediaNavbar';
 import Navbar from './components/layout/Navbar';
@@ -32,12 +33,10 @@ if(localStorage.token){
 }
 
 const App = () => {
-
   useEffect(()=>{
     store.dispatch(loadUser());
     store.dispatch(getCurrentProfile());
   }, []);
-
   return(
   <Provider store={store}>
   <MediaNavbar />
@@ -49,16 +48,15 @@ const App = () => {
         <Switch>
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
-          <section className="app">
-          <PrivateRoute exact path='/home' component={Home} />
-          <PrivateRoute exact path='/profile' component={Profile} />
-          <PrivateRoute exact path='/studio' component={UploadStream} />
-          <PrivateRoute exact path='/stream' component={LiveStreamMiddleware} />
-          <PrivateRoute exact path='/browse' component={BrowsePage} />
-          <PrivateRoute exact path='/category/:category' component={Category} />
-          <PrivateRoute exact path='/user/:user' component={Wall} />
-          <PrivateRoute exact path='/message/:user' component={Inbox} />
-          </section>
+            <PrivateRoute exact path='/home' component={Home} />
+            <PrivateRoute exact path='/profile' component={Profile} />
+            <PrivateRoute exact path='/studio' component={UploadStream} />
+            <PrivateRoute exact path='/stream' component={LiveStreamMiddleware} />
+            <PrivateRoute exact path='/browse' component={BrowsePage} />
+            <PrivateRoute exact path='/category/:category' component={Category} />
+            <PrivateRoute exact path='/user/:user' component={Wall} />
+            <PrivateRoute exact path='/message/:user' component={Inbox} />
+            <PrivateRoute exact path='/support' component={Support} />
         </Switch>
     </Fragment>
   </Router>

@@ -1055,3 +1055,53 @@ border-radius: 100%;
   text-decoration: underline;
   cursor: pointer;
 }
+
+.support_page__container, .support_page__content{
+  height: 100%;
+  position: relative;
+}
+
+.support_page__content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.support_image{
+  position: absolute;
+  bottom: 10%;
+  opacity: 1;
+  width: 400px;
+  z-index: -1;
+}
+
+.support_page h1{
+  margin-top: 60px;
+  opacity: 0.6;
+}
+
+.support_page textarea, input{
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+}
+
+.support_page input{
+  height: 35px;
+}
+
+.support_input{
+  width: 500px;
+}
+
+.support_page p{
+  opacity: 0.7;
+  margin-bottom: 5px;
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+.support_page button{
+  margin-top:30px;
+}

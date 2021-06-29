@@ -130,7 +130,7 @@ const Landing = () => {
                 Our platform is made for everyone to be able to record and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
               </h4>
               <Link to="/register">
-                <Button primary text="Browse Products"></Button>
+                <Button primary text="Browse Podcasts"></Button>
               </Link>
             </div>
             <img className="feature__image" src={Images.landing_podcast} alt=""/>
@@ -157,7 +157,7 @@ const Landing = () => {
             <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
           </div>
           <Link to="/register">
-            <Button primary text="Start Recording"></Button>
+            <Button primary text="Subscribe"></Button>
           </Link>
         </section>
 

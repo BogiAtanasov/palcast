@@ -43,6 +43,28 @@ router.post('/livestream', [auth,upload.array('uploadFiles', 1)], async (req,res
 
 });
 
+router.post('/getNewPodcast', auth, async (req,res) => {
+  const {history} = req.body;
+
+  try {
+    var newPodcast = [];
+    if(history.length > 0){
+      newPodcast = await pool.query(`SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture FROM podcasts as p
+        LEFT JOIN profiles as pr ON (p.user_id = pr.user_id)` + `WHERE p.podcast_id not in (`+ history.join(",") + `) ` + `ORDER BY p.date_added DESC LIMIT 1`);
+    }else{
+      newPodcast = await pool.query(`SELECT DISTINCT p.podcast_id, p.date_added, p.description, p.file_path, p.episode_cover, p.title, p.category, p.user_id, pr.first_name, pr.last_name, pr.profile_picture FROM podcasts as p
+        LEFT JOIN profiles as pr ON (p.user_id = pr.user_id) ORDER BY p.date_added DESC LIMIT 1`);
+    }
+
+    res.json(newPodcast.rows[0]);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 
 
 module.exports = router;

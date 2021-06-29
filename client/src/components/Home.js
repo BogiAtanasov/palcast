@@ -406,7 +406,6 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                 <div className="most_active_info">
                   <Link to={`/user/` + elem.user_id} >
                     <p style={{fontWeight:'500'}}><span>{elem.first_name}</span> <span>{elem.last_name}</span></p>
-                    <p style={{opacity: '0.5'}}><span>{elem.count} {elem.count > 1 ? "podcasts" : "podcast"}</span></p>
                   </Link>
                 </div>
                 {followingList.includes(elem.user_id) ?

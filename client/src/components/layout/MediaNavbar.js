@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import podcast from '../../assets/podcast/test.mp3'
 import './layout.css';
 import { FaPlay, FaStepForward, FaStepBackward, FaForward, FaBackward, FaPause } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
+import { update_media } from '../../actions/media';
+import axios from 'axios';
 
 const ProgressBar = ({progress, timeleft, timepassed}) => {
   return(
@@ -45,11 +48,16 @@ const ProgressBar = ({progress, timeleft, timepassed}) => {
   )
 }
 
-const MediaNavbar = ({logout, isAuthenticated, media}) => {
+const MediaNavbar = ({logout, isAuthenticated, media, update_media}) => {
+  // const routerlocation = useLocation();
+
   const [mediaProgress, setMediaProgressInput] = useState(0);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState();
+  const [trackIndex, setTrackIndex] = useState();
+  const [updateHistory, setUpdateHistory] = useState(true);
   const [currentProgress, setCurrentProgress] = useState();
+  const [history, setHistory] = useState([]);
   const [test, setTest] = useState(1);
   let interval = useRef(null); // setInterval
   let podcast_media = useRef();
@@ -57,13 +65,15 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
     if(media.file != null){
       podcast_media.current = new Audio("http://palcast.net/uploads/podcasts/" + media.file.file_path);
       playAudio();
+
+      if(updateHistory){
+        window.localStorage.setItem("playingHistory", JSON.stringify([...history, media]))
+        setTrackIndex(history.length);
+        setHistory([...history, media]);
+        setUpdateHistory(true);
+      }
     }
-    // const interval = setInterval(() => {
-    //   console.log(media.currentTime);
-    //   console.log(media.duration);
-    //   setMediaProgressInput((media.currentTime / media.duration) * 100);
-    // }, 1000);
-    // return () => clearInterval(interval);
+
   }, [media]);
 
   useEffect(() => {
@@ -74,7 +84,26 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
     }
   }, [media]);
 
+  useEffect(() => {
+    if(media.file === null){
+      var localHistory = window.localStorage.getItem("playingHistory");
+      if(localHistory != null){
+        localHistory = JSON.parse(localHistory);
+        setHistory(localHistory);
+        let lastItem = localHistory[localHistory.length-1];
+        setTrackIndex(localHistory.length-1);
+        update_media(lastItem.file);
+      }
+    }
+  }, []);
+
   const playAudio = () => {
+
+    if(podcast_media.current === undefined){
+      getNewPodcast();
+      return;
+    }
+
     podcast_media.current.play();
     setCurrentlyPlaying(true);
     interval.current = setInterval(() => {
@@ -86,16 +115,39 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
     clearInterval(interval.current);
     podcast_media.current.pause();
     setCurrentlyPlaying(false);
+
+  }
+
+  const getNewPodcast = async () => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    console.log(history);
+    const body = JSON.stringify({history: history.map((elem) => {
+      return(elem.file.podcast_id);
+    })});
+
+    const res = await axios.post('/api/studio/getNewPodcast', body, config);
+    console.log(res);
+    update_media(res.data);
   }
 
   if(!isAuthenticated)return(<Fragment></Fragment>);
+  // if(routerlocation.pathname==="/" || routerlocation.pathname==="/login" || routerlocation.pathname==="/register")return(<Fragment></Fragment>);
 
 
   return (
     <div className="media_navbar">
       <div className="media_navbar_buttons">
         <button onClick={()=>{
-          podcast_media.current.currentTime -= 10;
+          if(trackIndex > 0){
+            setTrackIndex(trackIndex-1);
+            setUpdateHistory(false);
+            update_media(history[trackIndex-1].file);
+          }
+
         }}><FaStepBackward /></button>
         <button onClick={()=>{
           podcast_media.current.currentTime -= 10;
@@ -113,7 +165,14 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
           podcast_media.current.currentTime += 10;
         }}><FaForward /></button>
         <button onClick={()=>{
-          podcast_media.current.currentTime += 10;
+          if(trackIndex < history.length - 1){
+            setTrackIndex(trackIndex+1);
+            setUpdateHistory(false);
+            update_media(history[trackIndex+1].file);
+          }else{
+            //Get new podcast
+            getNewPodcast();
+          }
         }}><FaStepForward /></button>
       </div>
 
@@ -137,7 +196,8 @@ const MediaNavbar = ({logout, isAuthenticated, media}) => {
 
 MediaNavbar.propTypes = {
   logout: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  update_media: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -145,4 +205,4 @@ const mapStateToProps = state => ({
   media: state.media
 })
 
-export default connect(mapStateToProps, {logout})(MediaNavbar);
+export default connect(mapStateToProps, {logout, update_media})(MediaNavbar);

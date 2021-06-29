@@ -14,7 +14,7 @@ body, html{
 .landing_page {
   position: relative;
   min-height: 100vh;
-  height: 100%;
+  /* height: 100%; */
   background: var(--gray);
   z-index: 10;
 }
@@ -103,6 +103,9 @@ section.catalog{
 .catalog__browse{
   width: 500px;
 }
+.catalog__browse div{
+  margin: auto;
+}
 
 .catalog__examples{
   display: flex;
@@ -187,12 +190,13 @@ section.laptop h1{
 .newsletter__inputs{
   display: flex;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .landing_page .newsletter{
   text-align: center;
-  margin: 200px 0px;
+  margin-top: 200px;
+  margin-bottom: 100px;
 }
 
 .newsletter__inputs div{
@@ -308,4 +312,9 @@ section.laptop h1{
 .login_redirect span, .register_redirect span{
   text-decoration: underline;
   color: white !important;
+}
+
+footer{
+  background: black;
+  height: 200px;
 }

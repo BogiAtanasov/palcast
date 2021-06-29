@@ -33,6 +33,14 @@
   border-radius: 10px;
 }
 
+#root{
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.app{
+  height: calc(100% - 75px);
+}
 
 .navbar{
   position: fixed;

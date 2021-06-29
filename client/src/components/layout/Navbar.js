@@ -12,6 +12,7 @@ import { IoHome } from "react-icons/io5";
 import { RiVideoUploadFill } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'
 
 const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => {
 
@@ -21,6 +22,7 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
   const [profileDropdown, toggleProfile] = useState(false);
   const [unread, setUnread] = useState(false);
   const dropdownRef = useRef(false);
+  const routerlocation = useLocation();
 
 
   useEffect(()=>{
@@ -69,7 +71,7 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
         setUnread(counter);
       }
   }
-
+  if(routerlocation.pathname==="/" || routerlocation.pathname==="/login" || routerlocation.pathname==="/register")return(<Fragment></Fragment>);
   if(!isAuthenticated || profile == null)return(<Fragment></Fragment>);
   return (
     <div className="navbar">
@@ -82,7 +84,7 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
             <Link to="/home"><li className={`${currentPage == "home" ? 'active' : ""}`} onClick={()=>setCurrentPage("home")}><IoHome />Dashboard</li></Link>
             <Link to="/browse"><li className={`${currentPage == "browse" ? 'active' : ""}`} onClick={()=>setCurrentPage("browse")}><FaSearch />Browse</li></Link>
             <Link to="/studio"><li className={`${currentPage == "record" ? 'active' : ""}`} onClick={()=>setCurrentPage("record")}><RiVideoUploadFill /> Record</li></Link>
-            <li className={`${currentPage == "support" ? 'active' : ""}`} onClick={()=>setCurrentPage("support")}><MdHelp />Support</li>
+            <Link to="/support"><li className={`${currentPage == "support" ? 'active' : ""}`} onClick={()=>setCurrentPage("support")}><MdHelp />Support</li></Link>
           </ul>
           <div className="bottomMenu">
             <Link to="/profile"><li className={`psettingsMenu ${currentPage == "profile" ? 'active' : ""}`} onClick={()=>setCurrentPage("profile")}><FaCog />Profile Settings</li></Link>

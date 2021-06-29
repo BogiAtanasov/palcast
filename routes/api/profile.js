@@ -2,7 +2,9 @@ const express = require('express');
 const auth = require('../../middleware/auth');
 const router = express.Router();
 const pool = require("../../db");
-const multer = require('multer')
+const multer = require('multer');
+const nodemailer = require('nodemailer');
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if(file.mimetype == "audio/mpeg"){
@@ -110,13 +112,56 @@ router.get('/notifications', auth, async (req,res) => {
 
 });
 
-// @route GET api/profile/updateNotifications
+// @route POST api/profile/updateNotifications
 // @desc Updates the sent notifications as seen
 router.post('/updateNotifications', auth, (req,res) => {
   const notificationList =  req.body.notificationList.join(',');
   try {
 
     pool.query("UPDATE notifications SET seen=true WHERE notification_id in ("+ notificationList +")", []);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
+// @route POST api/profile/sendSupportEmail
+// @desc sends a support email
+router.post('/sendSupportEmail', auth, async (req,res) => {
+  const user_email =  req.user.email;
+  const {subject, content} = req.body;
+
+  let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: 'palcastnbu@gmail.com',
+        pass: 'palcastnbu@234'
+        }
+  });
+
+  var mailOptions = {
+    from: user_email,
+    to: 'ba_96@abv.bg',
+    subject: subject,
+    text: content
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
+  try {
+
+    res.json({success: true});
 
   } catch (e) {
     console.error(e.message);

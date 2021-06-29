@@ -21,6 +21,7 @@ import cat1 from '../assets/images/cat1.png';
 import cat2 from '../assets/images/cat2.png';
 import cat3 from '../assets/images/cat3.png';
 import cat4 from '../assets/images/cat4.png';
+import support from '../assets/images/support.svg';
 
 
 export default {
@@ -47,4 +48,5 @@ export default {
     cat2,
     cat3,
     cat4,
+    support,
 };
