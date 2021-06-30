@@ -130,7 +130,8 @@ const MediaNavbar = ({logout, isAuthenticated, media, update_media}) => {
     })});
 
     const res = await axios.post('/api/studio/getNewPodcast', body, config);
-    console.log(res);
+    if(res.data === "")return;
+
     update_media(res.data);
   }
 

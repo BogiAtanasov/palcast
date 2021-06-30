@@ -10,13 +10,30 @@ router.get('/category/:category', auth, async (req,res) => {
 
   try {
     const podcasts =  await pool.query("SELECT * FROM podcasts as po LEFT JOIN profiles as pr ON (po.user_id = pr.user_id) WHERE category = $1", [req.params.category]);
-    // const podcasts =  await pool.query("SELECT * FROM podcasts");
+
     let payload = podcasts.rows.map((elem)=>{
       var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       let d = new Date(elem.date_added);
       elem.date_added = d.toLocaleDateString("en-US",options);
       return elem;
     });
+
+    for(let pod of payload){
+
+      let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.likes = likes.rows.map((elem) => {
+        return elem.user_id;
+      });
+
+      let comments = await pool.query("SELECT * FROM comments c LEFT JOIN profiles p ON (p.user_id = c.user_id) WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.comments = comments.rows.map((elem) => {
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let d = new Date(elem.date_added);
+        elem.date_added = d.toLocaleDateString("en-US",options);
+        return elem;
+      });
+
+    }
 
 
     res.json(payload);
@@ -261,6 +278,47 @@ router.post('/suggestions', auth, async (req,res) => {
     let news = news_result.data;
 
     res.json(news);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
+// @route GET api/catalog/category
+// @desc Uploads mp3
+router.post('/search', auth, async (req,res) => {
+  const {search} = req.body;
+  try {
+    const podcasts =  await pool.query("SELECT * FROM podcasts as po LEFT JOIN profiles as pr ON (po.user_id = pr.user_id) WHERE po.title LIKE '%"+ search +"%'");
+
+    let payload = podcasts.rows.map((elem)=>{
+      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      let d = new Date(elem.date_added);
+      elem.date_added = d.toLocaleDateString("en-US",options);
+      return elem;
+    });
+
+    for(let pod of payload){
+
+      let likes =  await pool.query("SELECT user_id FROM likes WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.likes = likes.rows.map((elem) => {
+        return elem.user_id;
+      });
+
+      let comments = await pool.query("SELECT * FROM comments c LEFT JOIN profiles p ON (p.user_id = c.user_id) WHERE podcast_id = $1", [pod.podcast_id]);
+      pod.comments = comments.rows.map((elem) => {
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let d = new Date(elem.date_added);
+        elem.date_added = d.toLocaleDateString("en-US",options);
+        return elem;
+      });
+
+    }
+
+    res.json(payload);
+
 
   } catch (e) {
     console.error(e.message);

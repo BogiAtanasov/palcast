@@ -45,6 +45,7 @@ router.post('/livestream', [auth,upload.array('uploadFiles', 1)], async (req,res
 
 router.post('/getNewPodcast', auth, async (req,res) => {
   const {history} = req.body;
+  console.log(history);
 
   try {
     var newPodcast = [];
