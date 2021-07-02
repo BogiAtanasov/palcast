@@ -15,10 +15,12 @@ import LiveStreamMiddleware from './components/LiveStreamMiddleware';
 import Profile from './components/Profile';
 import Support from './components/Support';
 import UploadStream from './components/UploadStream';
+import StreamPage from './components/StreamPage';
 import MediaNavbar from './components/layout/MediaNavbar';
 import Navbar from './components/layout/Navbar';
 import PrivateRoute from './components/routing/PrivateRoute';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { toastConfig } from 'react-simple-toasts';
 
 //Redux
 import { Provider } from 'react-redux';
@@ -33,6 +35,11 @@ if(localStorage.token){
 }
 
 const App = () => {
+  toastConfig({
+    time: 2000,
+    className: 'my-toast-message',
+  });
+
   useEffect(()=>{
     store.dispatch(loadUser());
     store.dispatch(getCurrentProfile());
@@ -50,7 +57,8 @@ const App = () => {
           <Route exact path='/login' component={Login} />
             <PrivateRoute exact path='/home' component={Home} />
             <PrivateRoute exact path='/profile' component={Profile} />
-            <PrivateRoute exact path='/studio' component={UploadStream} />
+            <PrivateRoute exact path='/upload' component={UploadStream} />
+            <PrivateRoute exact path='/studio' component={StreamPage} />
             <PrivateRoute exact path='/stream' component={LiveStreamMiddleware} />
             <PrivateRoute exact path='/browse' component={BrowsePage} />
             <PrivateRoute exact path='/category/:category' component={Category} />

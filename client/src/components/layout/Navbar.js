@@ -9,7 +9,7 @@ import { FaBell, FaUserAlt, FaCog, FaSearch } from "react-icons/fa";
 import { MdHome, MdHelp } from "react-icons/md";
 import { HiLogout } from "react-icons/hi";
 import { IoHome } from "react-icons/io5";
-import { RiVideoUploadFill } from "react-icons/ri";
+import { RiVideoUploadFill, RiFolderUploadFill } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom'
@@ -83,7 +83,8 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
           <ul>
             <Link to="/home"><li className={`${currentPage == "home" ? 'active' : ""}`} onClick={()=>setCurrentPage("home")}><IoHome />Dashboard</li></Link>
             <Link to="/browse"><li className={`${currentPage == "browse" ? 'active' : ""}`} onClick={()=>setCurrentPage("browse")}><FaSearch />Browse</li></Link>
-            <Link to="/studio"><li className={`${currentPage == "record" ? 'active' : ""}`} onClick={()=>setCurrentPage("record")}><RiVideoUploadFill /> Record</li></Link>
+            <Link to="/upload"><li className={`${currentPage == "upload" ? 'active' : ""}`} onClick={()=>setCurrentPage("upload")}><RiFolderUploadFill /> Upload</li></Link>
+            <Link to="/studio"><li className={`${currentPage == "record" ? 'active' : ""}`} onClick={()=>setCurrentPage("record")}><RiVideoUploadFill /> Stream</li></Link>
             <Link to="/support"><li className={`${currentPage == "support" ? 'active' : ""}`} onClick={()=>setCurrentPage("support")}><MdHelp />Support</li></Link>
           </ul>
           <div className="bottomMenu">
@@ -126,7 +127,10 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
           }
           </div>
 
-            <div style={{position: 'relative'}} className={`${currentPage == "profile" ? 'active' : ""}`} onClick={()=>{
+            <div style={{position: 'relative'}} onClick={()=>setCurrentPage("profilepage")}>
+              <Link to={`/user/` + user.user_id} ><img className="navbar_profile" src={`/uploads/images/${profile.profile_picture}`} alt=""/></Link>
+            </div>
+            {/* <div style={{position: 'relative'}} className={`${currentPage == "profile" ? 'active' : ""}`} onClick={()=>{
               toggleProfile(!profileDropdown);
             }}>
               <img className="navbar_profile" src={`/uploads/images/${profile.profile_picture}`} alt=""/>
@@ -137,7 +141,7 @@ const Navbar = ({logout, user, isAuthenticated, profile: {profile,loading}}) => 
                 <li onClick={()=> logout() }><HiLogout/>Logout</li>
               </div>
               }
-            </div>
+            </div> */}
       </div>
     </div>
   )

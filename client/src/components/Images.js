@@ -22,6 +22,9 @@ import cat2 from '../assets/images/cat2.png';
 import cat3 from '../assets/images/cat3.png';
 import cat4 from '../assets/images/cat4.png';
 import support from '../assets/images/support.svg';
+import settings from '../assets/images/settings.svg';
+import upload from '../assets/images/upload.svg';
+import stream from '../assets/images/stream.svg';
 
 
 export default {
@@ -49,4 +52,7 @@ export default {
     cat3,
     cat4,
     support,
+    settings,
+    stream,
+    upload
 };

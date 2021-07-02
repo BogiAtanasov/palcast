@@ -5,12 +5,16 @@ import {connect} from 'react-redux';
 import { getCurrentProfile, updateProfile } from '../actions/profile';
 import PropTypes from 'prop-types';
 import { FaCog } from "react-icons/fa";
+import Images from './Images';
+import toast from 'react-simple-toasts';
+
 import {Link} from 'react-router-dom';
 
 const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,loading}}) => {
 
+
+
   const[formData, setFormData] = useState({
-      email: '',
       password: '',
       first_name: '',
       last_name: '',
@@ -26,7 +30,6 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
 
     if(profile){
       setFormData({
-        email: loading || !profile.email ? "" : profile.email,
         first_name: loading || !profile.first_name ? "" : profile.first_name,
         last_name: loading || !profile.last_name ? "" : profile.last_name,
         profile_id: loading || !profile.profile_id ? "" : profile.profile_id,
@@ -35,37 +38,37 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
       });
     }
 
-
   }, [loading]);
 
   const submitForm = () => {
     updateProfile({first_name: formData.first_name, last_name:formData.last_name, profile_picture:formData.profile_picture, cover_photo: formData.cover_photo });
+    toast('Profile updated!');
   };
 
   return (
     <div className="profile_page profile_page__container">
       <div className="profile_page__content">
-        <h1><FaCog /> Account Settings</h1>
+        <h2>Account Settings</h2>
 
         <div className="profile__form">
+        <div style={{}}>
+          {/* <Input value={formData.password} onChange={(value)=>setFormData({...formData, password:value})} title="Password" description="Change your password"/> */}
 
-        <Input value={formData.email} onChange={(value)=>setFormData({...formData, email:value})} title="Email" description="Change your email address"/>
+          <Input value={formData.first_name} onChange={(value)=>setFormData({...formData, first_name:value})} title="First Name" description="Change your first name"/>
 
-        <Input value={formData.password} onChange={(value)=>setFormData({...formData, password:value})} title="Password" description="Change your password"/>
+          <Input value={formData.last_name} onChange={(value)=>setFormData({...formData, last_name:value})} title="Last Name" description="Change your last name"/>
 
-        <Input value={formData.first_name} onChange={(value)=>setFormData({...formData, first_name:value})} title="First Name" description="Change your first name"/>
+          <Input value={formData.profile_picture} type="file" onChange={(value)=>{
+            setFormData({...formData, profile_picture:value});
+          }} title="Upload File" description="Set the profile photo for your account" id="upload-profile-picture"/>
 
-        <Input value={formData.last_name} onChange={(value)=>setFormData({...formData, last_name:value})} title="Last Name" description="Change your last name"/>
+          <Input value={formData.cover_photo} type="file" onChange={(value)=>{
+            setFormData({...formData, cover_photo:value});
+          }} title="Upload File" description="Set the cover photo of your account" id="upload-cover-photo"/>
 
-        <Input value={formData.profile_picture} type="file" onChange={(value)=>{
-          setFormData({...formData, profile_picture:value});
-        }} title="Upload File" description="Set the profile photo for your account" id="upload-profile-picture"/>
-
-        <Input value={formData.cover_photo} type="file" onChange={(value)=>{
-          setFormData({...formData, cover_photo:value});
-        }} title="Upload File" description="Set the cover photo of your account" id="upload-cover-photo"/>
-
-        <Button onClick={()=> submitForm() } primary text="Update Profile"></Button>
+          <Button onClick={()=> submitForm() } primary text="Update Profile"></Button>
+        </div>
+        <img className="stream_image" src={Images.settings} alt=""/>
 
         </div>
       </div>

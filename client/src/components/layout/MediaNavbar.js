@@ -48,9 +48,8 @@ const ProgressBar = ({progress, timeleft, timepassed}) => {
   )
 }
 
-const MediaNavbar = ({logout, isAuthenticated, media, update_media}) => {
+const MediaNavbar = ({match, logout, isAuthenticated, media, update_media}) => {
   // const routerlocation = useLocation();
-
   const [mediaProgress, setMediaProgressInput] = useState(0);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState();
@@ -136,7 +135,7 @@ const MediaNavbar = ({logout, isAuthenticated, media, update_media}) => {
   }
 
   if(!isAuthenticated)return(<Fragment></Fragment>);
-  // if(routerlocation.pathname==="/" || routerlocation.pathname==="/login" || routerlocation.pathname==="/register")return(<Fragment></Fragment>);
+  // if(window.location.pathname==="/" || window.location.pathname==="/login" || window.location.pathname==="/register")return(<Fragment></Fragment>);
 
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Input from './forms/Input';
+import Images from './Images';
 import Button from './forms/Button';
 import {connect} from 'react-redux';
 import { getCurrentProfile, updateProfile } from '../actions/profile';
@@ -8,7 +9,7 @@ import { FaCog } from "react-icons/fa";
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import FormData from 'form-data';
-
+import toast from 'react-simple-toasts';
 
 const UploadStream = ({auth}) => {
 
@@ -39,6 +40,9 @@ const UploadStream = ({auth}) => {
             'Content-Type': 'multipart/form-data',
           }
       });
+
+      setFormData({...formData, title: '', description: "", category: "", mp3: null, episode_cover: null});
+      toast('Podcast uploaded!');
   };
 
   const addLiveStream = () => {
@@ -64,36 +68,20 @@ const UploadStream = ({auth}) => {
   return (
     <div className="uploadstream_page uploadstream_page__container">
       <div className="uploadstream_page__content">
-        <div className="studio_tabs">
-          <h1 onClick={()=>setTab("upload")} className={`${selectedTab == "upload" ? "selected" : ""}`}>Upload Podcast</h1>
-          <h1 onClick={()=>setTab("stream")} className={`${selectedTab == "stream" ? "selected" : ""}`}>Stream Podcast</h1>
-        </div>
-
-        {selectedTab == "upload" &&
+        <h2>Upload a stream</h2>
         <div className="profile__form">
-
+          <div>
           <Input value={formData.mp3} type="file" onChange={(value)=>setFormData({...formData, mp3:value})} title="Upload File" description="the file must be mp3 or wav format" id="upload-mp3"/>
           <Input value={formData.title} onChange={(value)=>setFormData({...formData, title:value})} title="Title" description="Set the title of the podcast"/>
           <Input value={formData.description} onChange={(value)=>setFormData({...formData, description:value})} title="Description" description="Set the description of the podcast"/>
           <Input value={formData.category} onChange={(value)=>setFormData({...formData, category:value})} title="Category" description="Set the category of the podcast"/>
           <Input value={formData.episode_cover} type="file" onChange={(value)=>setFormData({...formData, episode_cover:value})} title="Upload File" description="Set the cover photo for this episode" id="upload-episode-cover"/>
           <Button onClick={()=> submitForm() } primary text="Publish"></Button>
-
+          </div>
+          <img className="upload_image" src={Images.upload} alt=""/>
         </div>
-        }
 
-        {selectedTab == "stream" &&
-        <div className="profile__form">
-          <Input value={formData.title} onChange={(value)=>setFormData({...formData, title:value})} title="Name" description="Set the title of the podcast"/>
-          <Input value={formData.category} onChange={(value)=>setFormData({...formData, category:value})} title="Category" description="Set the category of the podcast"/>
-          <Input value={formData.description} onChange={(value)=>setFormData({...formData, description:value})} title="Description" description="Set the description of the podcast"/>
-          <Input value={formData.episode_cover} type="file" onChange={(value)=>setFormData({...formData, episode_cover:value})} title="Upload File" description="Set the cover photo for this episode" id="upload-episode-cover"/>
 
-          <Link to={`/stream?room=${formData.title}`}>
-            <Button primary onClick={()=>addLiveStream()} text="Start Live Broadcast"></Button>
-          </Link>
-        </div>
-        }
       </div>
     </div>
   )

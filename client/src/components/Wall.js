@@ -20,7 +20,7 @@ const Wall = ({getCurrentProfile,update_media, match, auth, profile: {profile,lo
   const [followers, setFollowers] = useState([]);
   const [followers_ids, setFollowersIds] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [inboxOpened, openInbox] = useState(false);
+  const [inboxOpened, openInbox] = useState(true);
   const [messages, setMessages] = useState([]);
 
   useEffect(()=>{

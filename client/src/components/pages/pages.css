@@ -317,4 +317,46 @@ section.laptop h1{
 footer{
   background: black;
   height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialFooter svg{
+  background: white;
+  border-radius: 100%;
+  padding: 7px;
+  margin: 0px 15px;
+  transition: 0.2s ease all;
+  font-size: 20px;
+}
+
+.socialFooter svg:hover{
+  background: var(--orange);
+  cursor: pointer;
+  fill: white;
+}
+
+.linksFooter{
+  display: flex;
+  margin-top: 1.33em;
+}
+
+.linksFooter h4{
+  margin: 0 10px;
+  color: white;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: 0.2s ease all;
+}
+.linksFooter h4:hover{
+  cursor: pointer;
+  opacity: 1;
+}
+
+.copyright{
+  color: white;
+  opacity: 0.6;
+  font-size: 14px;
 }

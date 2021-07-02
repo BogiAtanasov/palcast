@@ -4,7 +4,9 @@ import Images from '../Images';
 import Button from '../forms/Button';
 import Input from '../forms/Input';
 import { Link } from 'react-router-dom';
-import { FaFacebookSquare, FaTwitterSquare, FaYoutubeSquare } from "react-icons/fa";
+import { FaFacebookSquare, FaTwitterSquare, FaYoutubeSquare, FaTwitter, FaFacebookF } from "react-icons/fa";
+import { RiInstagramFill } from "react-icons/ri";
+
 
 const Landing = () => {
   const [searchInput, setSearchInput] = useState();
@@ -164,7 +166,18 @@ const Landing = () => {
       </div>
     </div>
     <footer>
-
+        <div className="socialFooter">
+              <FaFacebookF />
+              <FaTwitter />
+              <RiInstagramFill />
+        </div>
+        <div className="linksFooter">
+              <h4>Login</h4>
+              <h4>Register</h4>
+              <h4>Terms of use</h4>
+              <h4>Privacy Policy</h4>
+        </div>
+        <h4 className="copyright">©NBU Final Project</h4>
     </footer>
     </div>
   )

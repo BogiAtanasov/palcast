@@ -11,8 +11,12 @@ body{
 .profile_page__container, .uploadstream_page__container, .browse_page__container,.catalog_page__container{
   width: 90%;
   margin: auto;
-  background: white;
   padding-bottom: 75px;
+}
+
+.uploadstream_page__container, .uploadstream_page__content{
+  height: 100%;
+  margin-top: 0px !important;
 }
 
 .catalog_page__container{
@@ -35,6 +39,10 @@ body{
 .profile_page__content, .uploadstream_page__content, .browse_page__content {
   margin-top: 30px;
   padding: 20px;
+}
+
+input[type="file"]{
+  max-width: 200px;
 }
 
 .catalog_page__content{
@@ -1106,4 +1114,52 @@ border-radius: 100%;
 
 .support_page button{
   margin-top:30px;
+}
+
+.upload_image{
+  /* position: absolute; */
+  bottom: 10%;
+  width: 400px;
+  opacity: 1;
+  z-index: -1;
+}
+.stream_image{
+  width: 600px;
+}
+
+.profile__form{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  /* height: calc(100% - 75px); */
+  height: fit-content;
+}
+
+.uploadstream_page__content h2 {
+  margin-top: 60px;
+  opacity: 0.6;
+  text-align: center;
+  font-size:1.5em;
+}
+
+.profile_page__content h2{
+  margin-top: 0px;
+  opacity: 0.6;
+  text-align: center;
+  font-size:1.5em;
+}
+
+.my-toast-message{
+  height: 50px !important;
+}
+
+.my-toast-message div{
+  min-width: unset !important;
+  padding: 2px 16px;
+}
+
+.style_toast-list__378gH{
+  top:20px !important;
+  bottom: unset !important;
+  left: calc(50% + 125px) !important;
 }
