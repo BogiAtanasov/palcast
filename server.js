@@ -4,6 +4,7 @@ const http = require('http');
 const cors = require('cors');
 const pool = require("./db");
 const app = express();
+const path = require('path');
 
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
@@ -17,7 +18,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://palcast.net:5000",
     methods: ["GET", "POST"],
 }
 });
@@ -118,14 +119,14 @@ io.on('connection', (socket) => {
   })
 });
 
-app.get("/", (req,res) => res.send('API RUNNING'));
+app.get("/api", (req,res) => res.send('API RUNNING'));
 
 //Init middleware
 
 //Get data from req.body
 app.use(express.json({extended: false}));
 
-app.get('/', (req, res) => res.send('API RUNNING'));
+app.get('/api', (req, res) => res.send('API RUNNINGs'));
 
 // Define Routes
 app.use("/api/users", require('./routes/api/users'));
@@ -134,6 +135,12 @@ app.use("/api/profile", require('./routes/api/profile'));
 app.use("/api/studio", require('./routes/api/studio'));
 app.use("/api/catalog", require('./routes/api/catalog'));
 app.use("/api/interact", require('./routes/api/interact'));
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req,res) =>{
+   res.sendFile(path.join(__dirname+'/client/build/index.html'));
+ });
+
 
 
 const PORT = process.env.PORT || 5000;

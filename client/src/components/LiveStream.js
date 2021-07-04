@@ -64,7 +64,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
   useEffect(() => {
     const { room } = queryString.parse(window.location.search);
 
-    socket = io('localhost:5000');
+    socket = io('https://palcast.net');
     socketRef.current = socket;
 
     navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
@@ -162,7 +162,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
     }
 
 
-  }, ['localhost:5000', window.location.search]);
+  }, ['palcast.net:5000', window.location.search]);
 
   useEffect(() => {
   socket.on('message', message => {
