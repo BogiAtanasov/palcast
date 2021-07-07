@@ -196,7 +196,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         </div>
                       </div>
                       <div className="podcastDescription">
-                        <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+                        <h3 >{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
                         <p>{elem.description}</p>
                       </div>
 
@@ -271,7 +271,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         </div>
                       </div>
                       <div className="podcastDescription">
-                        <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+                        <h3 >{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
                         <p>{elem.description}</p>
                       </div>
 
@@ -341,7 +341,7 @@ const Home = ({getCurrentProfile, logout, update_media, auth, profile: {profile,
                         </div>
                       </div>
                       <div className="podcastDescription">
-                        <h3 style={{display: 'flex', alignItems: 'center'}}>{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
+                        <h3 >{elem.title}<span className={`badge badge-${elem.category}`}>{elem.category}</span></h3>
                         <p>{elem.description}</p>
                       </div>
                       <Link to={`/stream?room=${elem.title}`}>

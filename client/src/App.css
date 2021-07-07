@@ -699,17 +699,17 @@ input[type="file"]{
   color: white;
   background: #af4bfb;
 }
-.badge-comedy{
-  background: #fd8888;
-  color: white;
+.badge-chill{
+  color: #fff;
+  background: #4bfbfb;
 }
 .badge-comedy{
   background: #fd8888;
   color: white;
 }
-.badge-health{
-  color: black;
-  background: #4bfbaa;
+.badge-news{
+  color: #fff;
+  background: #3d43fb;
 }
 
 .livechat_container, .suggestions_container{
@@ -1162,4 +1162,64 @@ border-radius: 100%;
   top:20px !important;
   bottom: unset !important;
   left: calc(50% + 125px) !important;
+}
+
+@media (max-width: 1400px) {
+  .livechat_container, .suggestions_container{
+    min-width: unset;
+    flex: 1 0 25%;
+  }
+
+  .livevideo_container{
+    grid-template-columns: 1fr;
+  }
+
+  .livechat_container{
+    flex: 1 0 25%;
+  }
+
+  .category img {
+    width: 100%;
+  }
+
+  .wall_page .livechat_container {
+    margin: 0;
+
+  }
+
+  .wall_page .feed_content {
+    order: 2;
+  }
+
+  .wall_page .inbox {
+    order: 1;
+    margin-bottom: 20px;
+  }
+
+  .wall_page .feed {
+    flex-direction: column;
+  }
+
+
+}
+@media (max-width: 1600px) {
+  .wall_right {
+    flex: unset;
+    margin-left: 20px;
+  }
+
+  .wall_page .inbox {
+    flex: 1;
+  }
+
+  .wall_page .inbox .livechat_container{
+    min-width: unset;
+  }
+
+  .wall_page .podcastDescription{
+    max-width: 80%;
+  }
+  .wall_right .podcast__left {
+    padding-right:20px;
+  }
 }
