@@ -162,7 +162,7 @@ const LiveStream = ({getCurrentProfile, auth, profile: {profile,loading}}) => {
     }
 
 
-  }, ['palcast.net:5000', window.location.search]);
+  }, ['https://palcast.net', window.location.search]);
 
   useEffect(() => {
   socket.on('message', message => {

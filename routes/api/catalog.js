@@ -67,7 +67,7 @@ router.get('/feed', auth, async (req,res) => {
 
     const followings = await pool.query(`SELECT follows_user_id from follows WHERE user_id = $1`, [req.user.id]);
     const following_users = followings.rows.map((elem) => elem.follows_user_id);
-
+    console.log("Test");
     var most_active_user_profiles = [];
     if(most_active_users.length > 0){
       most_active_user_profiles = await pool.query(
@@ -86,7 +86,6 @@ router.get('/feed', auth, async (req,res) => {
         user["count"] = find_user[0].count;
       }
     }
-
     for(let user of most_recent_query.rows){
       if(following_users.includes(user.user_id)){
         user["follows"] = true;
@@ -94,7 +93,6 @@ router.get('/feed', auth, async (req,res) => {
         user["follows"] = false;
       }
     }
-
 
 
     var podcasts =  await pool.query(
@@ -114,7 +112,7 @@ router.get('/feed', auth, async (req,res) => {
     const livestreams = await pool.query(
       'SELECT * FROM livestreams l LEFT JOIN profiles p ON (l.user_id = p.user_id)'
     )
-
+    console.log("Test3");
     //Get more podcasts if the feed query returns less than 10
     if(podcasts.rows.length < 10){
 

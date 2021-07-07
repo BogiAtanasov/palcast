@@ -22,6 +22,7 @@ router.post('/', [auth,upload.array('uploadFiles', 2)], async (req,res) => {
   const {title, description, category} = JSON.parse(req.body.payload);
   try {
     let new_podcast = await pool.query("INSERT INTO podcasts (user_id,file_path,title,description,category,episode_cover) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *", [req.user.id, req.files[0].originalname,title,description,category,req.files[1].originalname]);
+    res.json({success: true});
   } catch (e) {
     console.error(e.message);
     res.status(500).send("Server Error");

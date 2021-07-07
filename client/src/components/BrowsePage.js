@@ -143,9 +143,9 @@ const BrowsePage = ({update_media,auth, profile: {profile,loading}}) => {
             </Link>
           </div>
           <div className="category">
-            <Link to="/category/health">
+            <Link to="/category/news">
               <img src={Images.cat4} alt=""/>
-              <h4>Health Podcasts</h4>
+              <h4>News Podcasts</h4>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sunt culpa debitis consequuntur</p>
             </Link>
           </div>

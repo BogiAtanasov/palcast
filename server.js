@@ -45,17 +45,7 @@ io.on('connection', (socket) => {
 
   })
 
-  // example usersVideo =  array(
-  //   'RoomTest' => [
-  //     qwe123123edasdasd,
-  //     asdasewqe213123ra,
-  //     bvwereq3413221eda,
-  //   ],
-  //   'BestRoom' => [
-  //     pytrkmer452341eda,
-  //     vbkdmbn3nejqne341
-  //    ]
-  // )
+
   socket.on("join-video", async ({room:roomID, user_id}) => {
 
     const profile = await pool.query("SELECT * FROM profiles WHERE user_id = $1", [user_id]);
@@ -92,7 +82,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect user', () => {
     const user = removeUser(socket.id);
-
+    console.log("disconnect user");
     //video
     const roomID = socketToRoom[socket.id];
     let room = usersVideo[roomID];
@@ -110,7 +100,7 @@ io.on('connection', (socket) => {
       io.to(user.room).emit('message', { user: 'admin', text: `${user.user_id} has left.` });
       io.to(user.room).emit('roomData', { room: user.room, users: usersInRoom});
     }
-
+    console.log(usersInRoom);
     if(usersInRoom.length === 0){
        pool.query("DELETE FROM livestreams WHERE title = $1", [roomID]);
     }
@@ -120,13 +110,10 @@ io.on('connection', (socket) => {
 });
 
 app.get("/api", (req,res) => res.send('API RUNNING'));
-
 //Init middleware
 
 //Get data from req.body
 app.use(express.json({extended: false}));
-
-app.get('/api', (req, res) => res.send('API RUNNINGs'));
 
 // Define Routes
 app.use("/api/users", require('./routes/api/users'));
@@ -136,11 +123,14 @@ app.use("/api/studio", require('./routes/api/studio'));
 app.use("/api/catalog", require('./routes/api/catalog'));
 app.use("/api/interact", require('./routes/api/interact'));
 
+//Serve static files when react files are built
+//Comment out when npm run dev
+app.use('/uploads', express.static('client/public/uploads'));
 app.use(express.static(path.join(__dirname, 'client/build')));
-app.get('*', (req,res) =>{
-   res.sendFile(path.join(__dirname+'/client/build/index.html'));
+// app.use('/uploads', express.static('client/uploads'));
+app.get('*', (req,res,next) =>{
+      res.sendFile(path.join(__dirname+'/client/build/index.html'));
  });
-
 
 
 const PORT = process.env.PORT || 5000;
