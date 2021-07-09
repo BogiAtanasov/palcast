@@ -1223,3 +1223,16 @@ border-radius: 100%;
     padding-right:20px;
   }
 }
+
+.alert{
+  position: fixed;
+  color: white;
+  top: 20px;
+  right: 50%;
+  left: 50%;
+  background: #ef6d6d;
+  width: padding;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

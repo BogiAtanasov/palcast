@@ -5,6 +5,7 @@ import Button from '../forms/Button';
 import Input from '../forms/Input';
 import { Link, Redirect } from 'react-router-dom';
 import { FaFacebook, FaGoogle} from "react-icons/fa";
+import toast from 'react-simple-toasts';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -61,8 +62,8 @@ const Login = ({ login, isAuthenticated, loading }) => {
         <div className="login__form">
           <h1>Sign in</h1>
           <div className="social_login">
-            <img src={Images.fb} alt=""/>
-            <img src={Images.google} alt=""/>
+            {/* <img src={Images.fb} alt=""/> */}
+            {/* <img src={Images.google} alt=""/> */}
           </div>
           <h4>or use your email account</h4>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>

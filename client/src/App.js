@@ -21,7 +21,7 @@ import Navbar from './components/layout/Navbar';
 import PrivateRoute from './components/routing/PrivateRoute';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { toastConfig } from 'react-simple-toasts';
-
+import toast from 'react-simple-toasts';
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';

@@ -24,9 +24,12 @@ const Landing = () => {
             <Link to="/">Palcast</Link>
           </h1>
           <ul>
-            <li><Link to="">Browse</Link></li>
-            <li><Link to="">Features</Link></li>
-            <li><Link to="">Support</Link></li>
+            <li><Link to="/browse">Browse</Link></li>
+            <li onClick={()=>{
+              var element = document.getElementsByClassName("features")[0]
+              element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+            }}><Link to="">Features</Link></li>
+            <li><Link to="/support">Support</Link></li>
             <li><Link to="/login" className="signUpNav">Sign in</Link></li>
           </ul>
         </nav>
@@ -34,7 +37,7 @@ const Landing = () => {
         <section className="header">
           <div className="header__text">
             <h1>The easiest way to share your conversations with the world</h1>
-            <h4>Record and listen to podcasts made by regular friends and family.</h4>
+            <h4>Stream and listen to podcasts made by regular friends and family.</h4>
             <Link to="/register">
               <Button primary text="Sign up now"></Button>
             </Link>
@@ -116,9 +119,9 @@ const Landing = () => {
           <div className="feature">
             <img className="feature__image" src={Images.landing_recording} alt=""/>
             <div className="feature__text">
-              <h1>Record podcasts</h1>
+              <h1>Stream podcasts</h1>
               <h4>
-                Our platform is made for everyone to be able to record and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
+                Our platform is made for everyone to be able to stream and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
               </h4>
               <Link to="/register">
                 <Button primary text="Sign up now"></Button>
@@ -129,7 +132,7 @@ const Landing = () => {
             <div className="feature__text">
               <h1>Participate Live</h1>
               <h4>
-                Our platform is made for everyone to be able to record and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
+                Our platform is made for everyone to be able to stream and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
               </h4>
               <Link to="/register">
                 <Button primary text="Browse Podcasts"></Button>
@@ -142,10 +145,10 @@ const Landing = () => {
             <div className="feature__text">
               <h1>Listen on the go</h1>
               <h4>
-                Our platform is made for everyone to be able to record and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
+                Our platform is made for everyone to be able to stream and share prodcasts with the world. Wether you are a group of friends or a family, it is the perfect place to share your conversations.
               </h4>
               <Link to="/register">
-                <Button primary text="Start Recording"></Button>
+                <Button primary text="Start Streaming"></Button>
               </Link>
             </div>
           </div>

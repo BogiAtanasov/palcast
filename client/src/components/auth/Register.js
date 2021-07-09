@@ -68,8 +68,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <div className="register__form">
           <h1>Create Account</h1>
           <div className="social_login">
-            <img src={Images.fb} alt=""/>
-            <img src={Images.google} alt=""/>
+            {/* <img src={Images.fb} alt=""/> */}
+            {/* <img src={Images.google} alt=""/> */}
           </div>
           <h4>or use your email for registration</h4>
           <Input primary value={emailInput} iconName='mail' onChange={(value)=>setEmailInput(value)} placeholder="Email"/>
