@@ -34,6 +34,20 @@ router.get('/me', auth, async (req,res) => {
 
 });
 
+// @route GET api/profile/catalog
+// @desc Get user catalog
+router.get('/catalog', auth, async (req,res) => {
+  try {
+    const podcasts =  await pool.query("SELECT * FROM podcasts WHERE user_id = $1", [req.user.id]);
+    res.json(podcasts.rows);
+
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
+
 // @route POST api/profile
 // @desc Update profile
 router.post('/', [auth,upload.array('uploadFiles', 2)], async (req,res) => {
@@ -73,6 +87,7 @@ router.get('/user/:user_id', auth, async (req,res) => {
   }
 
 });
+
 
 
 // @route GET api/profile/messageHistory

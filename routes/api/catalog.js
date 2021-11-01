@@ -325,6 +325,19 @@ router.post('/search', auth, async (req,res) => {
 
 });
 
+// @route POST api/catalog/delete
+// @desc Deletes a user's podcast
+router.post('/delete', auth, async (req,res) => {
+  const {podcast_id} =  req.body;
+  try {
+    await pool.query("DELETE FROM podcasts WHERE podcast_id = $1", [podcast_id]);
+    res.json({});
 
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+
+});
 
 module.exports = router;

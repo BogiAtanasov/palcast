@@ -18,6 +18,16 @@
 .btn-black{
   color: white;
   background: var(--black);
+  transition: 0.3s ease all;
+}
+
+.btn-black:hover{
+  background: #343434;
+}
+
+.upload_button:hover{
+  background: #343434 !important;
+  color: white;
 }
 
 .input{
@@ -151,6 +161,7 @@
   text-shadow: none;
   box-sizing: border-box;
   font: 400 13.3333px Arial;
+  transition: 0.3s ease all;
 }
 
 .input_main .upload_button:hover{

@@ -608,6 +608,11 @@ input[type="file"]{
   transition: 0.2s all ease;
 }
 
+.home_page__content .podcast__bottom .play_button:hover{
+  cursor: pointer;
+  background: var(--orange);
+}
+
 .home_page__content .home_page__left .podcast__top img{
   width: 100%;
   height: 150px;
@@ -1235,4 +1240,15 @@ border-radius: 100%;
   width: fit-content;
   padding: 5px 10px;
   border-radius: 5px;
+}
+
+.most_active_user:hover a p:first-child{
+  color: var(--purple);
+}
+
+.profile_catalog_episode_wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 30px 0px;
 }

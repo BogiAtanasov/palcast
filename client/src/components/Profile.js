@@ -7,12 +7,11 @@ import PropTypes from 'prop-types';
 import { FaCog } from "react-icons/fa";
 import Images from './Images';
 import toast from 'react-simple-toasts';
+import axios from 'axios';
 
 import {Link} from 'react-router-dom';
 
 const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,loading}}) => {
-
-
 
   const[formData, setFormData] = useState({
       password: '',
@@ -23,11 +22,36 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
       cover_photo: null,
   });
 
-  const[test,setTest] = useState("");
+  const[podcasts,setPodcasts] = useState([]);
 
+  const getCatalog = async () => {
+    try {
+        const res = await axios.get('/api/profile/catalog');
+        
+        setPodcasts(res.data)
+
+        console.log("podcats",podcasts);
+    } catch (e) {
+
+    }
+  }
+
+  const deletePodcast = async (id) => {
+    try {
+        // const res = await axios.get('/api/profile/catalog');
+        
+        console.log(id, podcasts);
+        console.log(podcasts.filter((elem) => elem.podcast_id !== id));
+        setPodcasts(prev => prev.filter((elem) => elem.podcast_id !== id))
+
+        console.log("podcats",podcasts);
+    } catch (e) {
+
+    }
+  }
   useEffect(()=>{
     getCurrentProfile();
-
+    getCatalog();
     if(profile){
       setFormData({
         first_name: loading || !profile.first_name ? "" : profile.first_name,
@@ -50,7 +74,7 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
       <div className="profile_page__content">
         <h2>Account Settings</h2>
 
-        <div className="profile__form">
+        <div className="profile__form" style={{marginBottom: "40px"}}>
         <div style={{}}>
           {/* <Input value={formData.password} onChange={(value)=>setFormData({...formData, password:value})} title="Password" description="Change your password"/> */}
 
@@ -70,6 +94,24 @@ const Profile = ({getCurrentProfile, updateProfile, auth, profile: {profile,load
         </div>
         <img className="stream_image" src={Images.settings} alt=""/>
 
+        </div>
+
+        {podcasts.length > 0 && <h2>Uploaded Podcasts</h2>}
+
+        <div>
+
+          {podcasts.map((podcast) => {
+            return(
+              <div className="profile_catalog_episode_wrapper">
+                <img className="navbar_episode_cover" src={`/uploads/images/${podcast.episode_cover}`} alt=""/>
+                <div style={{flex: "0 0 500px", padding: "0px 20px"}}>
+                  <div className="media_podcast_info_title" >{podcast.title}</div>
+                  <div className="media_podcast_info_user">{podcast.description}</div>
+                </div>
+                <Button onClick={()=> deletePodcast(podcast.podcast_id) } style={{height: 'auto'}} primary text="Delete"></Button>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

@@ -24,7 +24,6 @@ const io = socketio(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log("We have a new connection");
 
   socket.on("join", async ({user_id, room}, callback) =>{
 
@@ -126,6 +125,7 @@ app.use("/api/interact", require('./routes/api/interact'));
 //Serve static files when react files are built
 //Comment out when npm run dev
 app.use('/uploads', express.static('client/public/uploads'));
+
 app.use(express.static(path.join(__dirname, 'client/build')));
 // app.use('/uploads', express.static('client/uploads'));
 app.get('*', (req,res,next) =>{

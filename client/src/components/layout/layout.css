@@ -461,3 +461,9 @@ input[type="checkbox"]:checked + .checkbox:active::before{
 .bottomMenu a{
   text-decoration: none;
 }
+
+.navbar_container li:hover{
+  color: #7C70FF;
+  fill: #7C70FF;
+  cursor: pointer;
+}

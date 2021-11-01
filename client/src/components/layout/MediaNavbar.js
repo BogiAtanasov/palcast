@@ -58,12 +58,16 @@ const MediaNavbar = ({match, logout, isAuthenticated, media, update_media}) => {
   const [currentProgress, setCurrentProgress] = useState();
   const [history, setHistory] = useState([]);
   const [test, setTest] = useState(1);
+  const [buttonClicks, setButtonClicks] = useState(0)
   let interval = useRef(null); // setInterval
   let podcast_media = useRef();
+
   useEffect(()=>{
     if(media.file != null){
       podcast_media.current = new Audio("http://palcast.net/uploads/podcasts/" + media.file.file_path);
-      playAudio();
+      if(buttonClicks > 0){
+        playAudio();
+      }
 
       if(updateHistory){
         window.localStorage.setItem("playingHistory", JSON.stringify([...history, media]))
@@ -159,6 +163,7 @@ const MediaNavbar = ({match, logout, isAuthenticated, media, update_media}) => {
           :
           <button className="button_play" onClick={()=>{
             playAudio();
+            setButtonClicks(buttonClicks+1);
           }}><FaPlay /></button>
         }
         <button onClick={()=>{
